@@ -93,5 +93,5 @@ export const releases = [
 export const artist = {
   name: "Empire Eyes",
   label: "ArteMusique",
-  subscribeUrl: "https://www.empire-eyes.com/subscribe",
+  subscribeUrl: "https://empireeyesmusic.substack.com",
 } as const;
