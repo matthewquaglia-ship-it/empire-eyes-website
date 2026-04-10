@@ -1,0 +1,191 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { artistLinks, socialLinks, releases, artist, videos } from "../data/links";
+
+// Hero always shows the most recent release — just append to the releases array
+const latestRelease = releases[releases.length - 1];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  name: "Empire Eyes",
+  genre: ["Alternative", "Future Pop"],
+  url: "https://www.empire-eyes.com",
+  sameAs: [
+    "https://open.spotify.com/artist/6fvpctR3TvJWAnRI0Q8wWe",
+    "https://music.apple.com/us/artist/empire-eyes/1672824701",
+    "https://www.instagram.com/empire.eyes/",
+    "https://www.youtube.com/@empireeyes",
+    "https://www.tiktok.com/@empire.eyes.official",
+  ],
+  album: releases.map((r) => ({
+    "@type": "MusicAlbum",
+    name: r.title,
+    datePublished: r.datePublished,
+    ...("tracks" in r ? { numTracks: r.tracks } : {}),
+  })),
+};
+---
+
+<Layout>
+  <script slot="structured-data" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <!-- Hero: full-viewport, typographic -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title" data-text="EMPIRE EYES">EMPIRE EYES</h1>
+      <p class="hero-release">{latestRelease.title}</p>
+      <p class="hero-meta">{latestRelease.type} &middot; {latestRelease.year} &middot; {latestRelease.genre}</p>
+    </div>
+    <span class="hero-scroll">&#x2193;</span>
+  </section>
+
+  <!-- Column Content -->
+  <main class="content">
+
+    <!-- Releases -->
+    <section class="section" id="release">
+      <p class="section-label">Releases</p>
+      <ul class="release-list">
+        {
+          [...releases].reverse().map((r) => {
+            const streamId = `stream-${r.title.replace(/\s+/g, "-").toLowerCase()}`;
+            const loreId = `lore-${r.title.replace(/\s+/g, "-").toLowerCase()}`;
+            return (
+              <li class="release-card">
+                <input type="checkbox" id={streamId} class="release-toggle" />
+                <input type="checkbox" id={loreId} class="lore-toggle" />
+                <img
+                  src={r.artwork}
+                  alt={`${r.title} artwork`}
+                  class="release-art"
+                  width="80"
+                  height="80"
+                  loading="lazy"
+                />
+                <div class="release-info release-info--music">
+                  <span class="release-title">{r.title}</span>
+                  <span class="release-meta">
+                    {r.type} &middot; {r.year}
+                    {"tracks" in r ? ` · ${r.tracks} tracks` : ""}
+                  </span>
+                  <span class="release-meta">{r.genre}</span>
+                  <div class="release-actions">
+                    {"lore" in r && <label for={loreId} class="release-platforms-toggle">READ ↓</label>}
+                    <label for={streamId} class="release-platforms-toggle">STREAM ↓</label>
+                  </div>
+                </div>
+                {"lore" in r && (
+                  <div class="release-lore">
+                    {(r.lore as string).split("\n\n").map((para) => (
+                      <p>{para}</p>
+                    ))}
+                  </div>
+                )}
+                <ul class="release-platform-list">
+                  {r.platforms.map((p) => (
+                    <li>
+                      <a href={p.url} target="_blank" rel="noopener noreferrer">
+                        <span>{p.name}</span>
+                        <span class="link-arrow">&rarr;</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    <!-- Watch -->
+    <section class="section" id="watch">
+      <p class="section-label">Watch</p>
+      <ul class="release-list">
+        {
+          videos.map((video) => (
+            <li class="release-card">
+              <a
+                href={`https://www.youtube.com/watch?v=${video.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="release-art-link video-thumb-link"
+              >
+                <img
+                  src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
+                  alt={`${video.title} thumbnail`}
+                  class="release-art video-thumb"
+                  loading="lazy"
+                />
+              </a>
+              <div class="release-info">
+                <span class="release-title">{video.title}</span>
+                <span class="release-meta">{video.label}</span>
+                <span class="release-meta">{video.year}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Listen: links to artist profile on each streaming platform -->
+    <section class="section" id="listen">
+      <p class="section-label">Listen</p>
+      <ul class="link-list">
+        {
+          artistLinks.map((link) => (
+            <li class="link-item">
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                <span>{link.name}</span>
+                <span class="link-arrow">&rarr;</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Follow -->
+    <section class="section" id="follow">
+      <p class="section-label">Follow</p>
+      <ul class="link-list">
+        {
+          socialLinks.map((link) => (
+            <li class="link-item">
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                <span>{link.name}</span>
+                <span class="link-arrow">&rarr;</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Subscribe -->
+    <section class="section" id="subscribe">
+      <p class="section-label">Subscribe</p>
+      <a
+        href={artist.subscribeUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="subscribe-link"
+      >
+        Get Updates
+      </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer-text">
+        &copy; {new Date().getFullYear()} {artist.name}
+        <br />
+        {artist.label}
+      </p>
+    </footer>
+
+  </main>
+</Layout>

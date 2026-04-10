@@ -1,0 +1,18 @@
+# Deploy this to /etc/caddy/Caddyfile on your VPS
+# Then: sudo systemctl reload caddy
+
+www.empire-eyes.com {
+	root * /var/www/empire-eyes
+	file_server
+	encode gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}
+
+empire-eyes.com {
+	redir https://www.empire-eyes.com{uri}
+}
