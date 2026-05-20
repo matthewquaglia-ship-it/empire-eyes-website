@@ -12,10 +12,9 @@
   --bg: #000;
   --fg: #fff;
   --border: #222;
-  --dim: #888;
+  --dim: #999;
   --font-display: "Arcade", monospace;
-  --font-body: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
-    "Liberation Mono", monospace;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
   --max-w: 640px;
   --gutter: 1.5rem;
   --nav-h: 52px;
@@ -121,10 +120,10 @@ body::before {
 }
 
 .hero-meta {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #333;
+  color: var(--dim);
 }
 
 .hero-scroll {
@@ -226,7 +225,7 @@ body::before {
 }
 
 .section-label {
-  font-size: 0.58rem;
+  font-size: 0.72rem;
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--dim);
@@ -293,7 +292,7 @@ body::before {
 }
 
 .release-meta {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--dim);
   letter-spacing: 0.05em;
   line-height: 1.2;
@@ -308,7 +307,7 @@ body::before {
 
 .release-platforms-toggle {
   display: inline-block;
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--dim);
@@ -377,7 +376,7 @@ body::before {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 0;
-  font-size: 0.63rem;
+  font-size: 0.72rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   transition: color 0.1s;
@@ -414,7 +413,7 @@ body::before {
 }
 
 .video-year {
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   letter-spacing: 0.2em;
   color: var(--dim);
 }
