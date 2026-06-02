@@ -206,6 +206,34 @@ body::before {
   animation: glitch 0.3s linear infinite reverse;
 }
 
+/* ─── HOLD-TO-ENTER: intense glitch ─── */
+@keyframes glitch-intense {
+  0%   { clip-path: inset(2%  0 85% 0); transform: translate(-6px,  1px); }
+  11%  { clip-path: inset(55% 0 20% 0); transform: translate( 7px, -3px); }
+  22%  { clip-path: inset(12% 0 72% 0); transform: translate(-5px,  4px); }
+  33%  { clip-path: inset(78% 0  6% 0); transform: translate( 6px, -2px); }
+  44%  { clip-path: inset(32% 0 48% 0); transform: translate(-7px,  3px); }
+  55%  { clip-path: inset(6%  0 80% 0); transform: translate( 5px, -4px); }
+  66%  { clip-path: inset(68% 0 16% 0); transform: translate(-6px,  2px); }
+  77%  { clip-path: inset(24% 0 60% 0); transform: translate( 7px, -1px); }
+  88%  { clip-path: inset(88% 0  3% 0); transform: translate(-5px,  3px); }
+  100% { clip-path: inset(2%  0 85% 0); transform: translate(-6px,  1px); }
+}
+
+.hero-title--holding {
+  user-select: none;
+}
+
+.hero-title--holding::before {
+  opacity: 1;
+  animation: glitch-intense 0.09s steps(1) infinite !important;
+}
+
+.hero-title--holding::after {
+  opacity: 1;
+  animation: glitch-intense 0.06s steps(1) infinite reverse !important;
+}
+
 /* ─── CONTENT COLUMN ─── */
 .content {
   width: 100%;

@@ -186,4 +186,32 @@ const jsonLd = {
     </footer>
 
   </main>
+  <script>
+    // ── HOLD TO ENTER: hold the hero title for 1.5s to reach the Listening Room ──
+    const title = document.querySelector('.hero-title') as HTMLElement | null;
+    const HOLD_MS = 1500;
+    let holdTimer: ReturnType<typeof setTimeout> | null = null;
+
+    function startHold(e: Event) {
+      e.preventDefault();
+      if (!title) return;
+      title.classList.add('hero-title--holding');
+      holdTimer = setTimeout(() => {
+        window.location.href = '/listening-room';
+      }, HOLD_MS);
+    }
+
+    function cancelHold() {
+      if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+      title?.classList.remove('hero-title--holding');
+    }
+
+    title?.addEventListener('mousedown', startHold);
+    title?.addEventListener('touchstart', startHold, { passive: false });
+    document.addEventListener('mouseup', cancelHold);
+    document.addEventListener('touchend', cancelHold);
+    document.addEventListener('touchcancel', cancelHold);
+    title?.addEventListener('contextmenu', e => e.preventDefault());
+    title?.setAttribute('draggable', 'false');
+  </script>
 </Layout>
