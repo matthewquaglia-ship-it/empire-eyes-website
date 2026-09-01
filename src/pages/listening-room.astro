@@ -56,29 +56,44 @@ const tracks: { title: string; label: string; year: number; scUrl: string }[] = 
     </header>
 
     <div class="lr-tracks content">
-      {tracks.length === 0 ? (
-        <p class="lr-empty">Nothing here yet. Check back soon.</p>
-      ) : (
-        tracks.map((t) => (
-          <div class="lr-track">
-            <div class="lr-track-meta">
-              <span class="lr-track-title">{t.title}</span>
-              <span class="lr-track-label">{t.label} &middot; {t.year}</span>
-            </div>
-            <div class="lr-embed">
-              <iframe
-                width="100%"
-                height="120"
-                scrolling="no"
-                frameborder="no"
-                allow="autoplay"
-                loading="lazy"
-                src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(t.scUrl)}&color=%23000000&inverse=true&auto_play=false&show_user=false&hide_related=true&show_comments=false&show_reposts=false&show_teaser=false`}
-              />
-            </div>
+      <!-- Disco Volante -->
+      <div class="lr-track">
+        <div class="lr-track-meta">
+          <span class="lr-track-title">Disco Volante</span>
+          <span class="lr-track-label">Playlist &middot; 2026</span>
+        </div>
+        <div class="lr-embed">
+          <iframe
+            width="100%"
+            height="300"
+            scrolling="no"
+            frameborder="no"
+            allow="autoplay; encrypted-media"
+            loading="lazy"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A2292403677%3Fsecret_token%3Ds-N2Gsxw8PCGv&color=%23c8c8c8&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
+          />
+        </div>
+      </div>
+
+      {tracks.map((t) => (
+        <div class="lr-track">
+          <div class="lr-track-meta">
+            <span class="lr-track-title">{t.title}</span>
+            <span class="lr-track-label">{t.label} &middot; {t.year}</span>
           </div>
-        ))
-      )}
+          <div class="lr-embed">
+            <iframe
+              width="100%"
+              height="120"
+              scrolling="no"
+              frameborder="no"
+              allow="autoplay"
+              loading="lazy"
+              src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(t.scUrl)}&color=%23000000&inverse=true&auto_play=false&show_user=false&hide_related=true&show_comments=false&show_reposts=false&show_teaser=false`}
+            />
+          </div>
+        </div>
+      ))}
     </div>
 
     <footer class="lr-footer content">
