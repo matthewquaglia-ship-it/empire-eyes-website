@@ -2,10 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 
-// ── LISTENING ROOM CONFIG ────────────────────────────────────────────────────
-// PASSWORD: distribute this to early access listeners.
-const PASSWORD = "EMPIRE"; // ← change to your access code
-
 // TRACKS: add SoundCloud track URLs (private links work).
 // Use the track/playlist URL from SoundCloud, e.g.:
 //   "https://soundcloud.com/empireeyes/your-track"
@@ -23,32 +19,10 @@ const tracks: { title: string; label: string; year: number; scUrl: string }[] = 
 
 <Layout
   title="The Listening Room — Empire Eyes"
-  description="Private early access listening. Empire Eyes."
+  description="Early access listening. Empire Eyes."
 >
-  <!-- Gate -->
-  <div class="lr-gate" id="lr-gate">
-    <div class="lr-gate-inner">
-      <p class="lr-gate-brand">EMPIRE EYES</p>
-      <h1 class="lr-gate-title">THE LISTENING ROOM</h1>
-      <p class="lr-gate-hint">Access code required</p>
-      <form class="lr-gate-form" id="lr-gate-form" autocomplete="off">
-        <input
-          type="password"
-          id="lr-gate-input"
-          class="lr-gate-input"
-          placeholder="· · · · · ·"
-          autocomplete="off"
-          spellcheck="false"
-          aria-label="Access code"
-        />
-        <button type="submit" class="lr-gate-submit">ENTER</button>
-      </form>
-      <p class="lr-gate-error" id="lr-gate-error" aria-live="polite"></p>
-    </div>
-  </div>
-
   <!-- Room -->
-  <main class="lr-room" id="lr-room" aria-hidden="true">
+  <main class="lr-room lr-room--visible" id="lr-room">
     <header class="lr-room-header content">
       <p class="lr-room-brand">EMPIRE EYES</p>
       <h1 class="lr-room-title">THE LISTENING ROOM</h1>
@@ -101,45 +75,6 @@ const tracks: { title: string; label: string; year: number; scUrl: string }[] = 
     </footer>
   </main>
 
-  <script define:vars={{ PASSWORD }}>
-    const KEY = "ee-room-v1";
-    const gate = document.getElementById("lr-gate");
-    const room = document.getElementById("lr-room");
-    const form = document.getElementById("lr-gate-form");
-    const input = document.getElementById("lr-gate-input");
-    const errorEl = document.getElementById("lr-gate-error");
-
-    function unlock() {
-      sessionStorage.setItem(KEY, "1");
-      gate.classList.add("lr-gate--out");
-      room.classList.add("lr-room--visible");
-      room.removeAttribute("aria-hidden");
-      setTimeout(() => gate.remove(), 700);
-    }
-
-    if (sessionStorage.getItem(KEY) === "1") {
-      unlock();
-    } else {
-      // Ensure gate is visible (handles any flash-of-room on slow paint)
-      gate.style.display = "flex";
-      setTimeout(() => input && input.focus(), 50);
-    }
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const val = input.value.trim();
-      if (val.toUpperCase() === PASSWORD.toUpperCase()) {
-        errorEl.textContent = "";
-        unlock();
-      } else {
-        errorEl.textContent = "Incorrect.";
-        input.value = "";
-        input.focus();
-        input.classList.add("lr-gate-input--shake");
-        setTimeout(() => input.classList.remove("lr-gate-input--shake"), 500);
-      }
-    });
-  </script>
 </Layout>
 
 <style is:global>
