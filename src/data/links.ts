@@ -70,16 +70,6 @@ export const releases = [
     ],
   },
   {
-    title: "Disco Volante",
-    type: "Album",
-    year: "Pre-Release",
-    datePublished: "",
-    genre: "Alternative / Future Pop",
-    artwork: "/images/disco-volante.jpg",
-    listenUrl: "/listening-room",
-    platforms: [],
-  },
-  {
     title: "TILT",
     type: "Album",
     year: 2024,
@@ -97,6 +87,16 @@ export const releases = [
       { name: "SoundCloud",    url: "https://soundcloud.com/empireeyes/sets/tilt" },
       { name: "Deezer",        url: "https://deezer.page.link/31CDv2kKLhAqJVGG9" },
     ],
+  },
+  {
+    title: "Disco Volante",
+    type: "Album",
+    year: "Pre-Release",
+    datePublished: "",
+    genre: "Alternative / Future Pop",
+    artwork: "/images/disco-volante.jpg",
+    listenUrl: "/listening-room",
+    platforms: [],
   },
 ] as const;
 
