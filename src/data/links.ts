@@ -55,7 +55,7 @@ export const releases = [
     title: "In Time",
     type: "Single",
     year: 2023,
-    datePublished: "2023-02-03",
+    datePublished: "2023-03-24",
     genre: "Alternative / Future Pop",
     artwork: "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02b7d426ba878feddd1ebf844e",
     lore: "SELL YOUR SOUL TO YOURSELF... DON'T LEAVE ANYTHING BEHIND",
@@ -76,6 +76,7 @@ export const releases = [
     datePublished: "2024-11-22",
     genre: "Alternative / Future Pop",
     tracks: 8,
+    tracklist: ["Intro", "Set Me Free", "Save The World", "Even When", "TILT", "In Time", "Modues", "Satori"],
     artwork: "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0224aef36d2462017b385c2c0a",
     lore: `The album is named after the permanent condition - the distance between what we've built and what's actually there. Not a crisis. Not a breakdown. The quiet hum of a world still running but no longer running on what it thinks it's running on.\n\nEverything looks normal. The lights are on. The systems hold. But something underneath has shifted, and the music knows it before you do.\n\nEach track moves through degrees of awareness. The early sound is held, coherent - compensation working invisibly, a cost you feel in the texture before you hear it in the melody. Then something gives. Not all at once - a sound that shouldn't be there, a silence where the structure used to hold, a moment where the ground you were standing on reveals itself as something built, not something real.\n\nThe album doesn't resolve into answers. It thins the walls. It stays close enough to the edge that whatever lives on the other side - raw, ancient, indifferent to everything we've constructed - can reach through.\n\nTILT is not the sound of things falling apart. It is the sound of finally seeing what was always underneath. And choosing to keep listening.`,
     platforms: [
@@ -95,6 +96,7 @@ export const releases = [
     genre: "Alternative / Future Pop",
     artwork: "/images/disco-volante.jpg",
     listenUrl: "/listening-room",
+    tracklist: ["This Road", "Kiss Yourself", "Forever", "See It All", "Divided by Me", "Consolation", "Space Time", "Take Me There"],
     platforms: [],
   },
 ] as const;

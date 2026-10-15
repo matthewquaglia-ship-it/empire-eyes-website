@@ -1,0 +1,233 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/global.css";
+import { releases } from "../../data/links";
+
+const slugify = (title: string) => title.toLowerCase().replace(/\s+/g, "-");
+
+export function getStaticPaths() {
+  const slugify = (title: string) => title.toLowerCase().replace(/\s+/g, "-");
+  return releases.map((r) => ({
+    params: { slug: slugify(r.title) },
+    props: { release: r },
+  }));
+}
+
+const { release: r } = Astro.props;
+
+const metaDesc = "lore" in r
+  ? (r.lore as string).replace(/\\n/g, " ").slice(0, 155) + "…"
+  : `${r.title} by Empire Eyes. ${r.type} · ${r.year} · ${r.genre}.`;
+---
+
+<Layout
+  title={`${r.title} — Empire Eyes`}
+  description={metaDesc}
+>
+  <main class="content rp-main">
+
+    <!-- Back -->
+    <div class="rp-back">
+      <a href="/#release">&larr; EMPIRE EYES</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="rp-hero">
+      <img
+        src={r.artwork}
+        alt={`${r.title} artwork`}
+        class="rp-artwork"
+        width="280"
+        height="280"
+      />
+      <div class="rp-hero-text">
+        <h1 class="rp-title">{r.title}</h1>
+        <p class="rp-meta">
+          {r.type}&nbsp;&middot;&nbsp;{r.year}&nbsp;&middot;&nbsp;{r.genre}
+          {"tracks" in r ? <>&nbsp;&middot;&nbsp;{r.tracks} tracks</> : null}
+        </p>
+      </div>
+    </section>
+
+    <!-- Stream / Listen -->
+    {"listenUrl" in r ? (
+      <section class="rp-section">
+        <h2 class="section-label">Listen</h2>
+        <a href={r.listenUrl as string} class="rp-listen-btn">PRE RELEASE LISTEN &rarr;</a>
+      </section>
+    ) : (r.platforms as readonly { name: string; url: string }[]).length > 0 ? (
+      <section class="rp-section">
+        <h2 class="section-label">Stream</h2>
+        <ul class="link-list">
+          {(r.platforms as readonly { name: string; url: string }[]).map((p) => (
+            <li class="link-item">
+              <a href={p.url} target="_blank" rel="noopener noreferrer">
+                <span>{p.name}</span>
+                <span class="link-arrow">&rarr;</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ) : null}
+
+    <!-- Tracklist -->
+    {"tracklist" in r && (
+      <section class="rp-section">
+        <h2 class="section-label">Tracklist</h2>
+        <ol class="rp-tracklist">
+          {(r.tracklist as readonly string[]).map((track, i) => (
+            <li class="rp-track">
+              <span class="rp-track-num">{String(i + 1).padStart(2, "0")}</span>
+              <span class="rp-track-name">{track}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <!-- Notes / Lore -->
+    {"lore" in r && (
+      <section class="rp-section rp-section--lore">
+        <h2 class="section-label">Notes</h2>
+        {(r.lore as string).split("\n\n").map((para: string) => (
+          <p class="rp-lore-para">{para}</p>
+        ))}
+      </section>
+    )}
+
+    <footer class="rp-footer">
+      <a href="/" class="rp-footer-brand">EMPIRE EYES</a>
+    </footer>
+
+  </main>
+</Layout>
+
+<style>
+  .rp-main {
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Back link */
+  .rp-back {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .rp-back a {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--dim);
+    transition: color 0.15s;
+  }
+  .rp-back a:hover { color: var(--fg); }
+
+  /* Hero */
+  .rp-hero {
+    padding: 2.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .rp-artwork {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    display: block;
+  }
+  @media (min-width: 480px) {
+    .rp-artwork { width: 260px; height: 260px; }
+  }
+  .rp-hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .rp-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 8vw, 3.2rem);
+    letter-spacing: 0.1em;
+    line-height: 1.05;
+  }
+  .rp-meta {
+    font-size: 0.72rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Section wrapper */
+  .rp-section {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Listen button */
+  .rp-listen-btn {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border: 1px solid var(--border);
+    padding: 0.85rem 2rem;
+    margin-top: 0.5rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .rp-listen-btn:hover {
+    border-color: var(--fg);
+    color: var(--fg);
+  }
+
+  /* Tracklist */
+  .rp-tracklist {
+    list-style: none;
+    margin-top: 0.5rem;
+  }
+  .rp-track {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .rp-track:last-child { border-bottom: none; }
+  .rp-track-num {
+    font-family: var(--font-display);
+    font-size: 0.58rem;
+    color: var(--dim);
+    letter-spacing: 0.08em;
+    min-width: 1.4rem;
+    flex-shrink: 0;
+  }
+  .rp-track-name {
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Lore */
+  .rp-section--lore .rp-lore-para {
+    font-size: 0.8rem;
+    line-height: 1.85;
+    color: #bbb;
+    letter-spacing: 0.02em;
+    margin-top: 1.1em;
+  }
+  .rp-section--lore .rp-lore-para:first-of-type { margin-top: 0.5rem; }
+
+  /* Footer */
+  .rp-footer {
+    padding: 2.5rem 0 3rem;
+    text-align: center;
+  }
+  .rp-footer-brand {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: #2e2e2e;
+    transition: color 0.15s;
+  }
+  .rp-footer-brand:hover { color: var(--dim); }
+</style>

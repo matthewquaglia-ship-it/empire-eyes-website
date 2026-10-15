@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 import { artistLinks, socialLinks, releases, artist, videos } from "../data/links";
 
+const slugify = (title: string) => title.toLowerCase().replace(/\s+/g, "-");
+
 // Hero always shows the most recent release — just append to the releases array
 const latestRelease = releases[releases.length - 1];
 
@@ -69,16 +71,20 @@ const jsonLd = {
               <li class="release-card">
                 <input type="checkbox" id={streamId} class="release-toggle" />
                 <input type="checkbox" id={loreId} class="lore-toggle" />
-                <img
-                  src={r.artwork}
-                  alt={`${r.title} artwork`}
-                  class="release-art"
-                  width="80"
-                  height="80"
-                  loading="lazy"
-                />
+                <a href={`/releases/${slugify(r.title)}`} class="release-art-link">
+                  <img
+                    src={r.artwork}
+                    alt={`${r.title} artwork`}
+                    class="release-art"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                  />
+                </a>
                 <div class="release-info release-info--music">
-                  <span class="release-title">{r.title}</span>
+                  <a href={`/releases/${slugify(r.title)}`} class="release-title-link">
+                    <span class="release-title">{r.title}</span>
+                  </a>
                   <span class="release-meta">
                     {r.type} &middot; {r.year}
                     {"tracks" in r ? ` · ${r.tracks} tracks` : ""}
