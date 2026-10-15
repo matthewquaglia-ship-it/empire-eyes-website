@@ -92,7 +92,6 @@ export const releases = [
     title: "Disco Volante",
     type: "Album",
     year: "Pre-Release",
-    datePublished: "",
     genre: "Alternative / Future Pop",
     artwork: "/images/disco-volante.jpg",
     listenUrl: "/listening-room",

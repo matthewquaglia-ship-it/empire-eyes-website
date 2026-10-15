@@ -2,14 +2,16 @@
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 
 const {
-  title = "Empire Eyes",
-  description = "Empire Eyes — Alternative / Future Pop. Listen to TILT now.",
+  title = "Empire Eyes — Alternative / Future Pop | Official Site",
+  description = "Empire Eyes — Alternative / Future Pop. Disco Volante pre-release available now. Hauntingly beautiful, deeply moving.",
+  noindex = false,
 } = Astro.props;
 
-const ogImage = new URL("/images/profile-red.jpg", Astro.site);
+const ogImage = new URL("/images/og-image.jpg", Astro.site);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -56,6 +58,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       }
     </style>
 
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <slot name="structured-data" />
   </head>
   <body>

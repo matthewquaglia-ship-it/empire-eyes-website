@@ -254,10 +254,22 @@ body::before {
 
 .section-label {
   font-size: 0.72rem;
+  font-weight: normal;
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--dim);
   margin-bottom: 1rem;
+}
+
+.bio-text {
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: #bbb;
+  letter-spacing: 0.02em;
+}
+
+.bio-text + .bio-text {
+  margin-top: 1em;
 }
 
 /* ─── RELEASE LIST ─── */

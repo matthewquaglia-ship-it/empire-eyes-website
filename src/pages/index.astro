@@ -10,7 +10,9 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "MusicGroup",
   name: "Empire Eyes",
+  description: "Empire Eyes delves deep into the enigmatic and complex nature of existence, weaving poetic lyrics with emotive melodies to create a sonic landscape that is at once mesmerising and thought-provoking. Alternative / Future Pop.",
   genre: ["Alternative", "Future Pop"],
+  image: "https://www.empire-eyes.com/images/og-image.jpg",
   url: "https://www.empire-eyes.com",
   sameAs: [
     "https://open.spotify.com/artist/6fvpctR3TvJWAnRI0Q8wWe",
@@ -18,11 +20,17 @@ const jsonLd = {
     "https://www.instagram.com/empire.eyes/",
     "https://www.youtube.com/@empireeyes",
     "https://www.tiktok.com/@empire.eyes.official",
+    "https://empireeyes.bandcamp.com/",
+    "https://soundcloud.com/empireeyes",
+    "https://listen.tidal.com/artist/37490305",
+    "https://link.deezer.com/s/32X2QWbJZKyGa8RAUaydg",
+    "https://www.facebook.com/empireeyesmusic",
+    "https://empireeyesmusic.substack.com",
   ],
   album: releases.map((r) => ({
     "@type": "MusicAlbum",
     name: r.title,
-    datePublished: r.datePublished,
+    ...(r.datePublished ? { datePublished: r.datePublished } : {}),
     ...("tracks" in r ? { numTracks: r.tracks } : {}),
   })),
 };
@@ -42,9 +50,16 @@ const jsonLd = {
   <!-- Column Content -->
   <main class="content">
 
+    <!-- Bio -->
+    <section class="section" id="about">
+      <h2 class="section-label">About</h2>
+      <p class="bio-text">Empire Eyes; SELL YOUR SOUL TO YOURSELF; DON&rsquo;T LEAVE ANYTHING BEHIND&hellip; Empire Eyes delves deep into the enigmatic and complex nature of existence, unraveling its mysteries and presenting them in a unique and authentic way. With a sound that is both hauntingly beautiful and deeply moving, Empire Eyes weaves together poetic lyrics and emotive melodies to create a sonic landscape that is at once mesmerising and thought-provoking.</p>
+      <p class="bio-text">Drawing inspiration from a wide range of musical genres and artistic influences, Empire Eyes has quickly established himself as an emerging presence in the indie music scene. With a fierce dedication to the craft and a deep passion for creating music that speaks to the soul, Empire Eyes is poised to make a lasting impact on the world of music and beyond.</p>
+    </section>
+
     <!-- Releases -->
     <section class="section" id="release">
-      <p class="section-label">Releases</p>
+      <h2 class="section-label">Releases</h2>
       <ul class="release-list">
         {
           [...releases].reverse().map((r) => {
@@ -105,7 +120,7 @@ const jsonLd = {
 
     <!-- Watch -->
     <section class="section" id="watch">
-      <p class="section-label">Watch</p>
+      <h2 class="section-label">Watch</h2>
       <ul class="release-list">
         {
           videos.map((video) => (
@@ -136,7 +151,7 @@ const jsonLd = {
 
     <!-- Listen: links to artist profile on each streaming platform -->
     <section class="section" id="listen">
-      <p class="section-label">Listen</p>
+      <h2 class="section-label">Listen</h2>
       <ul class="link-list">
         {
           artistLinks.map((link) => (
@@ -153,7 +168,7 @@ const jsonLd = {
 
     <!-- Follow -->
     <section class="section" id="follow">
-      <p class="section-label">Follow</p>
+      <h2 class="section-label">Follow</h2>
       <ul class="link-list">
         {
           socialLinks.map((link) => (
@@ -170,7 +185,7 @@ const jsonLd = {
 
     <!-- Subscribe -->
     <section class="section" id="subscribe">
-      <p class="section-label">Subscribe</p>
+      <h2 class="section-label">Subscribe</h2>
       <a
         href={artist.subscribeUrl}
         target="_blank"
