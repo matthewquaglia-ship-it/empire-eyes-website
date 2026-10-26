@@ -39,6 +39,8 @@ export const videos = [
     year: "Coming soon",
     thumb: "/images/forever-frame.jpg",
     sat: "MEDIASAT",
+    // READ write-up (paragraphs split on a blank line), shown above the viewer
+    lore: `The film for Forever started with a scoreboard. Our friend Jordan Lennon had bought an old LED score board and set it up at the back of his studio, and when the beautiful mind and dear friend Michael Spagnoletti and I saw it, the ideas started sparking. We'd use it like those old films where the car sits still and the screen behind it does the driving. So we put together some visuals and parked my car in front of it (Jordan needed a 367-point reverse parallel to get it in).\n\nThen, during a test shoot, we found something by accident: a visual delay that fed my performance back into the screen behind me, a beat late. It solved the thing I'd been struggling to show. The song is about letting go: "I don't mind it, cos now and then, forever's gonna fall apart." And here was the present, fading further and further into the past, right there in the frame.\n\nAfter hours of experimenting and a few more happy accidents, that's the film.`,
     reel: [
       { url: "/media/tv/teaser-forever.mp4", title: "FOREVER", sub: "MUSIC VIDEO · TEASER", file: "FOREVER_TEASER.MP4", focus: 0.35 },
       { url: "/media/tv/bts-forever.mp4", title: "FOREVER", sub: "ON SET · MV SHOOT", date: "NOV 11 2025", file: "FOREVER_ON_SET.MP4" },
