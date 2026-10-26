@@ -579,7 +579,7 @@ body::before {
   }
 }
 
-/* ─── SATELLITE TV (Watch section) ─── */
+/* ─── SATELLITE TV (top of the content column, above About) ─── */
 .satellite-tv {
-  margin-bottom: 1.5rem;
+  padding-bottom: 2rem;
 }

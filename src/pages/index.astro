@@ -53,6 +53,11 @@ const jsonLd = {
   <!-- Column Content -->
   <main class="content">
 
+    <!-- Satellite TV: VHS-filtered clips, sits above the bio -->
+    <section class="section satellite-tv" id="tv" aria-label="Empire Eyes Worldwide TV">
+      <SatelliteTV />
+    </section>
+
     <!-- Bio -->
     <section class="section" id="about">
       <h2 class="section-label">About</h2>
@@ -128,9 +133,6 @@ const jsonLd = {
     <!-- Watch -->
     <section class="section" id="watch">
       <h2 class="section-label">Watch</h2>
-      <div class="satellite-tv">
-        <SatelliteTV />
-      </div>
       <ul class="release-list">
         {
           videos.map((video) => (
