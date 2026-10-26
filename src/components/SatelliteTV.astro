@@ -18,9 +18,10 @@
 .ee-tv__screen{position:relative;aspect-ratio:4/3;max-width:100%;margin:6px 0;background:#000;border:2px solid #555;overflow:hidden}
 .ee-tv__screen>*{position:absolute;inset:0;width:100%;height:100%}
 .ee-tv__screen img,.ee-tv__screen video{object-fit:cover;opacity:.01}   /* the canvas draws them with the filter */
-.ee-tv__screen canvas{filter:saturate(1.3) contrast(1.08) brightness(1.06) sepia(.1)}
+.ee-tv__screen canvas{filter:saturate(1.12) contrast(1.04) brightness(1.03) sepia(.05)}
 .ee-tv--clean .ee-tv__screen canvas{filter:none}
-.ee-tv__fx{pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),
+.ee-tv--clean .ee-tv__screen img,.ee-tv--clean .ee-tv__screen video{opacity:1}
+.ee-tv__fx{pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.1) 0 1px,transparent 1px 3px),
   radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.55) 100%)}
 .ee-tv--clean .ee-tv__fx{background:none}
 .ee-tv__prompt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ee-fg);min-height:1.25em}
@@ -70,7 +71,7 @@
      src:[{url:"/media/tv/teaser-forever.mp4", title:"FOREVER", sub:"MUSIC VIDEO · TEASER", file:"FOREVER_TEASER.MP4"},
           {url:"/media/tv/bts-forever.mp4", title:"FOREVER", sub:"ON SET · MV SHOOT", date:"NOV 11 2025", file:"FOREVER_ON_SET.MP4", focus:0.5},
           {url:"/media/tv/bts-3766.mp4",   title:"ON SET",  sub:"THE CAR SHOT", file:"THE_CAR_SHOT.MP4", focus:0.5},
-          {url:"/media/tv/dv-space-reel.mp4",  title:"DISCO VOLANTE", sub:"SPACE REEL", file:"DV_SPACE_REEL.MP4", focus:0.5},
+          {url:"/media/tv/dv-space-reel.mp4",  title:"DISCO VOLANTE", sub:"ALBUM COMING SOON", file:"ALBUM_COMING_SOON.MP4", focus:0.5},
           {url:"/media/tv/dv-coming-soon.mp4", title:"DISCO VOLANTE", sub:"COMING SOON", file:"DISCO_VOLANTE.MP4", focus:0.5}]},
     {key:"Channel_EE", sat:"RAI-2",     name:"Channel EE",            file:"EE",                 kind:"EMPIRE EYES",    link:"", focus:0.5,
      src:[{url:"/media/tv/mv-intime.mp4",      title:"IN TIME",     sub:"MUSIC VIDEO", file:"IN_TIME.MP4"},
@@ -87,11 +88,14 @@
   ];
   /* ---- VHS FILTER SETTINGS ---- */
   const VHS = {
-    on: true,          // start with the filter on (the FX key toggles it)
-    softness: 0.5,     // 0 = sharp, 1 = very smeary (lower = more resolution)
-    chroma: 2.5,       // colour fringing in pixels
-    jitter: 1,         // horizontal line wobble
-    tracking: true,    // rolling tracking band
+    on: true,          // VHS filter on or off (off: the clips play clean)
+    button: false,     // show the F SIGNAL key so visitors can switch the filter
+    softness: 0.15,    // 0 = sharp, 1 = very smeary (lower = more resolution)
+    chroma: 0.8,       // colour fringing in pixels
+    jitter: 0.25,      // horizontal line wobble
+    tracking: false,   // rolling tracking band
+    glitch: false,     // occasional picture jump
+    grain: 0.04,       // film grain, 0 to about 0.1
     osd: true,         // satellite name in the corner (each channel's sat:) with the live light
     titleStrip: true   // title + timecode strip along the bottom
   };
@@ -151,11 +155,14 @@
     // 4. tracking band noise + head-switching noise at the bottom
     if(band>-40){ctx.globalAlpha=.28;ctx.drawImage(noise[Math.floor(t*30)%noise.length],0,0,80,5,0,band,W,18);ctx.globalAlpha=1;
       ctx.fillStyle='rgba(255,255,255,.12)';for(let i=0;i<3;i++)ctx.fillRect(Math.random()*W,band+Math.random()*16,20+Math.random()*60,1)}
-    ctx.globalAlpha=.5;ctx.drawImage(noise[Math.floor(t*24+3)%noise.length],0,0,80,3,(Math.random()*8-4),H-7,W,7);ctx.globalAlpha=1;
+    ctx.globalAlpha=.2;ctx.drawImage(noise[Math.floor(t*24+3)%noise.length],0,0,80,3,(Math.random()*8-4),H-7,W,7);ctx.globalAlpha=1;
     // 5. grain + bloom-ish lift
-    if(!reduce){ctx.globalAlpha=.08;ctx.drawImage(noise[Math.floor(t*24)%noise.length],0,0,W,H);ctx.globalAlpha=1}
-    ctx.globalCompositeOperation='screen';ctx.globalAlpha=.12;ctx.drawImage(low,0,0,W,H);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
-    // 6. on-screen display
+    if(!reduce){ctx.globalAlpha=VHS.grain;ctx.drawImage(noise[Math.floor(t*24)%noise.length],0,0,W,H);ctx.globalAlpha=1}
+    ctx.globalCompositeOperation='screen';ctx.globalAlpha=.06;ctx.drawImage(low,0,0,W,H);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+  }
+
+  // Corner display (satellite name + live light): drawn with or without the VHS filter
+  function cornerOSD(t){
     if(VHS.osd){ctx.font='20px VT323, monospace';const live=list(CHANNELS[ch]).length>0,sat=CHANNELS[ch].sat||('SAT-'+(ch+1));
       ctx.textAlign='right';ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillText(sat,307,27);ctx.fillStyle='#f2f2f2';ctx.fillText(sat,306,26);
       if(live&&Math.floor(t*1.2)%2){ctx.fillStyle='#ff3b30';ctx.beginPath();ctx.arc(306-ctx.measureText(sat).width-10,20,4,0,7);ctx.fill()}}
@@ -200,14 +207,15 @@
   function frame(now){
     globe(now);
     if(visible){const c=CHANNELS[ch],t=(now-t0)/1000;
-      if(!reduce&&now>nextGlitch){glitchUntil=now+120+Math.random()*180;nextGlitch=now+4000+Math.random()*7000}
+      if(VHS.glitch&&!reduce&&now>nextGlitch){glitchUntil=now+120+Math.random()*180;nextGlitch=now+4000+Math.random()*7000}
       if(now<switchUntil){ctx.drawImage(noise[Math.floor(Math.random()*noise.length)],0,0,W,H)}
       else{
         let ok=false;
         if(c.src&&!vid.hidden&&vid.readyState>=2)ok=drawCover(sctx,vid,vid.videoWidth,vid.videoHeight,cur&&cur.focus!=null?cur.focus:c.focus);
         else if(c.src&&!img.hidden&&img.complete)ok=drawCover(sctx,img,img.naturalWidth,img.naturalHeight,cur&&cur.focus!=null?cur.focus:c.focus);
         if(!ok)placeholder(sctx,c,t);
-        if(VHS.on)vhs(t,now);else ctx.drawImage(src,0,0);
+        if(VHS.on)vhs(t,now);else if(ok)ctx.clearRect(0,0,W,H);else ctx.drawImage(src,0,0);   // clean: the real video shows through
+        cornerOSD(t);
         if(ok&&VHS.titleStrip)titleCard(t,now);
       }
     }
@@ -218,8 +226,9 @@
   function key(num,label,fn,aria){const b=document.createElement('button');b.className='ee-tv__key';b.type='button';
     b.innerHTML='<i>'+num+'</i><span>'+label+'</span>';b.setAttribute('aria-label',aria);b.onclick=fn;keys.appendChild(b);return b}
   const chKeys=CHANNELS.map((c,i)=>key(i+1,c.key,()=>setCh(i),'Channel '+(i+1)+': '+c.name));
-  const fxKey=key('F','Signal',()=>{VHS.on=!VHS.on;fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on)},'Toggle the signal filter');
-  fxKey.classList.add('ee-tv__key--fx');fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on);
+  root.classList.toggle('ee-tv--clean',!VHS.on);
+  if(VHS.button){const fxKey=key('F','Signal',()=>{VHS.on=!VHS.on;fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on)},'Toggle the signal filter');
+    fxKey.classList.add('ee-tv__key--fx');fxKey.setAttribute('aria-pressed',VHS.on)}
   const skipKey=key('S','Skip',()=>nextClip(),'Next clip on this channel');
   const openKey=key('0','Watch',()=>{const l=CHANNELS[ch].link;if(l)window.open(l,'_blank','noopener')},'Open the full video');
   const list=c=>Array.isArray(c.src)?c.src:(c.src?[c.src]:[]);
@@ -229,6 +238,7 @@
     const L=list(c);vid.pause();vid.hidden=true;img.hidden=true;
     cur=null;if(!L.length){skipKey.hidden=true;document.getElementById('eePrompt').innerHTML='C:\\EMPIRE-EYES\\UPLINK&gt; tune <b>'+c.file+'</b> · no signal ';return}const item=L[c.i%L.length],u=typeof item==='string'?item:item.url;
     cur=typeof item==='string'?null:item;curAt=performance.now()+(reduce?80:300);
+    const fp=(cur&&cur.focus!=null?cur.focus:c.focus);vid.style.objectPosition=img.style.objectPosition='50% '+((fp==null?.5:fp)*100)+'%';
     if(isVideo(u)){vid.loop=L.length===1;vid.src=u;vid.hidden=false;vid.play().catch(()=>{})}else{img.src=u;img.hidden=false}
     const many=L.length>1;skipKey.hidden=!many;
     const name=cur&&cur.file?cur.file:cur&&cur.id?cur.id.toUpperCase().replace(/-/g,'_')+'.MP4':many?c.file+'_'+String(c.i%L.length+1).padStart(2,'0')+'.MP4':c.file;
