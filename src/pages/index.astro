@@ -137,40 +137,43 @@ const jsonLd = {
         {
           videos.map((video) => {
             const videoLoreId = `video-lore-${video.title.replace(/\s+/g, "-").toLowerCase()}`;
+            const hasPanel = "lore" in video || "reel" in video;
+            const thumb = "thumb" in video ? (video.thumb as string) : `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
             return (
             <li class="release-card">
-              {"lore" in video && <input type="checkbox" id={videoLoreId} class="lore-toggle" />}
-              <a
-                href={`https://www.youtube.com/watch?v=${video.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="release-art-link video-thumb-link"
-              >
-                <img
-                  src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
-                  alt={`${video.title} thumbnail`}
-                  class="release-art video-thumb"
-                  loading="lazy"
-                />
-              </a>
+              {hasPanel && <input type="checkbox" id={videoLoreId} class="lore-toggle" />}
+              {video.id ? (
+                <a
+                  href={`https://www.youtube.com/watch?v=${video.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="release-art-link video-thumb-link"
+                >
+                  <img src={thumb} alt={`${video.title} thumbnail`} class="release-art video-thumb" loading="lazy" />
+                </a>
+              ) : (
+                <label for={hasPanel ? videoLoreId : undefined} class="release-art-link video-thumb-link">
+                  <img src={thumb} alt={`${video.title} still`} class="release-art video-thumb" loading="lazy" />
+                </label>
+              )}
               <div class="release-info">
                 <span class="release-title">{video.title}</span>
                 <span class="release-meta">{video.label}</span>
                 <span class="release-meta">{video.year}</span>
-                {"lore" in video && (
+                {hasPanel && (
                   <div class="release-actions">
-                    <label for={videoLoreId} class="release-platforms-toggle">READ ↓</label>
+                    <label for={videoLoreId} class="release-platforms-toggle">{"lore" in video ? "READ ↓" : "WATCH ↓"}</label>
                   </div>
                 )}
               </div>
-              {"lore" in video && (
+              {hasPanel && (
                 <div class="release-lore video-lore">
-                  {(video.lore as string).split("\n\n").map((para) => (
+                  {"lore" in video && (video.lore as string).split("\n\n").map((para) => (
                     <p>{para}</p>
                   ))}
                   {"reel" in video && (
                     <div class="satellite-tv satellite-tv--reel">
-                      <SatelliteTV uid={`${videoLoreId}-tv`} reel={video.reel as unknown[]} sat="RAI-2" />
+                      <SatelliteTV uid={`${videoLoreId}-tv`} reel={video.reel as unknown[]} sat={"sat" in video ? (video.sat as string) : "RAI-2"} />
                     </div>
                   )}
                 </div>

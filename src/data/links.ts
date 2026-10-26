@@ -31,6 +31,24 @@ export const socialLinks = [
 
 export const videos = [
   {
+    // No YouTube id yet: the still opens the Forever viewer instead of linking out.
+    // When the video is up, set id to its YouTube id (and drop thumb to use YouTube's).
+    id: "",
+    title: "Forever",
+    label: "Music Video",
+    year: "Coming soon",
+    thumb: "/images/forever-frame.jpg",
+    sat: "MEDIASAT",
+    reel: [
+      { url: "/media/tv/teaser-forever.mp4", title: "FOREVER", sub: "MUSIC VIDEO · TEASER", file: "FOREVER_TEASER.MP4", focus: 0.35 },
+      { url: "/media/tv/bts-forever.mp4", title: "FOREVER", sub: "ON SET · MV SHOOT", date: "NOV 11 2025", file: "FOREVER_ON_SET.MP4" },
+      { url: "/media/tv/bts-forever-setup.mp4", title: "FOREVER", sub: "SETTING UP", date: "NOV 11 2025", file: "FOREVER_SETUP.MP4", focus: 0.45 },
+      { url: "/media/tv/bts-3766.mp4", title: "ON SET", sub: "THE CAR SHOT", file: "THE_CAR_SHOT.MP4" },
+      { url: "/media/tv/bts-forever-car.mp4", title: "FOREVER", sub: "THE CAR", date: "NOV 11 2025", file: "FOREVER_CAR.MP4", focus: 0.65 },
+      { url: "/media/tv/bts-forever-crew.mp4", title: "FOREVER", sub: "THE CREW", date: "NOV 11 2025", file: "FOREVER_CREW.MP4", focus: 0.3 },
+    ],
+  },
+  {
     id: "XbyrTjEagsU",
     title: "In Time",
     label: "Official Music Video",
