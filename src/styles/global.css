@@ -605,7 +605,7 @@ body::before {
 }
 .satellite-tv .ee-tv__name { gap: 0.7rem; }
 .satellite-tv .ee-tv__globe { width: 15px; height: 15px; color: var(--fg); }
-.satellite-tv #eeCh { letter-spacing: 0.2em; }
+.satellite-tv [data-ee="ch"] { letter-spacing: 0.2em; }
 .satellite-tv .ee-tv__screen { margin: 0; border: 0; }
 .satellite-tv .ee-tv__prompt {
   font-size: 15px;
@@ -640,3 +640,9 @@ body::before {
 .satellite-tv .ee-tv__key--fx { margin-left: auto; }
 .satellite-tv .ee-tv__key--fx[aria-pressed="true"] { background: none; color: var(--fg); }
 .satellite-tv .ee-tv__key--fx[aria-pressed="true"] i { color: #555; opacity: 1; }
+
+/* Viewer inside a video write-up (reel mode) */
+.satellite-tv--reel { padding: 1.2rem 0 0.5rem; }
+.satellite-tv--reel .ee-tv__keys { justify-content: center; gap: 0.5rem; }
+.video-lore { min-width: 0; width: 100%; }
+.satellite-tv--reel, .satellite-tv--reel .ee-tv { min-width: 0; max-width: 100%; }

@@ -135,8 +135,11 @@ const jsonLd = {
       <h2 class="section-label">Watch</h2>
       <ul class="release-list">
         {
-          videos.map((video) => (
+          videos.map((video) => {
+            const videoLoreId = `video-lore-${video.title.replace(/\s+/g, "-").toLowerCase()}`;
+            return (
             <li class="release-card">
+              {"lore" in video && <input type="checkbox" id={videoLoreId} class="lore-toggle" />}
               <a
                 href={`https://www.youtube.com/watch?v=${video.id}`}
                 target="_blank"
@@ -154,9 +157,27 @@ const jsonLd = {
                 <span class="release-title">{video.title}</span>
                 <span class="release-meta">{video.label}</span>
                 <span class="release-meta">{video.year}</span>
+                {"lore" in video && (
+                  <div class="release-actions">
+                    <label for={videoLoreId} class="release-platforms-toggle">READ ↓</label>
+                  </div>
+                )}
               </div>
+              {"lore" in video && (
+                <div class="release-lore video-lore">
+                  {(video.lore as string).split("\n\n").map((para) => (
+                    <p>{para}</p>
+                  ))}
+                  {"reel" in video && (
+                    <div class="satellite-tv satellite-tv--reel">
+                      <SatelliteTV uid={`${videoLoreId}-tv`} reel={video.reel as unknown[]} sat="RAI-2" />
+                    </div>
+                  )}
+                </div>
+              )}
             </li>
-          ))
+            );
+          })
         }
       </ul>
     </section>

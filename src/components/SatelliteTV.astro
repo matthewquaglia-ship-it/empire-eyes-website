@@ -2,6 +2,12 @@
 // Empire Eyes Worldwide satellite TV: a DOS-style frame that flips between
 // VHS-filtered clips. Edit the CHANNELS list inside the script below.
 // Clips live in public/media/tv/ (small, silent, H.264 MP4s).
+//
+// Reel mode: <SatelliteTV uid="someId" reel={[...clips]} sat="RAI-2" />
+// shows one list of clips with PREV / NEXT keys instead of channels
+// (used inside the In Time write-up). Each instance needs its own uid.
+interface Props { uid?: string; reel?: unknown[] | null; sat?: string }
+const { uid = "eeTv", reel = null, sat = "MEDIASAT" } = Astro.props;
 ---
 <style is:global>
 /* A plain DOS-style frame: title bar, screen, prompt line, function-key bar. Scoped to .ee-tv */
@@ -40,19 +46,19 @@
 @media (prefers-reduced-motion:reduce){.ee-tv__cur{animation:none}}
 </style>
 
-<div class="ee-tv" id="eeTv">
-  <div class="ee-tv__title"><span class="ee-tv__name"><span id="eeTitle">EMPIRE EYES WORLDWIDE</span><canvas class="ee-tv__globe" width="21" height="21" aria-hidden="true"></canvas><span>LIVE VIA SATELLITE</span></span><span id="eeCh">CH 01/04</span></div>
+<div class="ee-tv" id={uid}>
+  <div class="ee-tv__title"><span class="ee-tv__name"><span data-ee="title">EMPIRE EYES WORLDWIDE</span><canvas class="ee-tv__globe" width="21" height="21" aria-hidden="true"></canvas><span>LIVE VIA SATELLITE</span></span><span data-ee="ch">CH 01/04</span></div>
   <div class="ee-tv__screen">
     <img alt="" hidden>
     <video muted loop playsinline autoplay preload="metadata" hidden></video>
     <canvas width="320" height="240"></canvas>
     <div class="ee-tv__fx"></div>
   </div>
-  <div class="ee-tv__prompt" aria-live="polite"><span id="eePrompt"></span><span class="ee-tv__cur"></span></div>
-  <div class="ee-tv__keys" id="eeKeys" role="group" aria-label="Channels"></div>
+  <div class="ee-tv__prompt" aria-live="polite"><span data-ee="prompt"></span><span class="ee-tv__cur"></span></div>
+  <div class="ee-tv__keys" data-ee="keys" role="group" aria-label={reel ? "Clips" : "Channels"}></div>
 </div>
 
-<script is:inline>
+<script is:inline define:vars={{ uid, reel, reelSat: sat }}>
 (function(){
   /* ---- EDIT THIS LIST ----
      src:  a .gif, .mp4 or .webm (muted looping MP4/WebM is far smaller than a GIF)
@@ -87,7 +93,11 @@
           {url:"/media/tv/bts-studio-keys.mp4", title:"IN THE STUDIO", sub:"KEYS", file:"STUDIO_KEYS.MP4"},
           {url:"/media/tv/bts-forever-setup.mp4", title:"FOREVER", sub:"SETTING UP", date:"NOV 11 2025", file:"FOREVER_SETUP.MP4", focus:0.45},
           {url:"/media/tv/bts-forever-car.mp4",   title:"FOREVER", sub:"THE CAR",    date:"NOV 11 2025", file:"FOREVER_CAR.MP4", focus:0.65},
-          {url:"/media/tv/bts-forever-crew.mp4",  title:"FOREVER", sub:"THE CREW",   date:"NOV 11 2025", file:"FOREVER_CREW.MP4", focus:0.3}]},
+          {url:"/media/tv/bts-forever-crew.mp4",  title:"FOREVER", sub:"THE CREW",   date:"NOV 11 2025", file:"FOREVER_CREW.MP4", focus:0.3},
+          {url:"/media/tv/bts-intime-01.mp4", title:"IN TIME SHOOT", sub:"BTS 01", file:"IN_TIME_BTS_01.MP4"},
+          {url:"/media/tv/bts-intime-02.mp4", title:"IN TIME SHOOT", sub:"BTS 02", file:"IN_TIME_BTS_02.MP4"},
+          {url:"/media/tv/bts-intime-03.mp4", title:"IN TIME SHOOT", sub:"BTS 03", file:"IN_TIME_BTS_03.MP4"},
+          {url:"/media/tv/bts-intime-04.mp4", title:"IN TIME SHOOT", sub:"BTS 04", file:"IN_TIME_BTS_04.MP4"}]},
     {key:"Cinematica", sat:"PAS-2",     name:"Cinematica",            file:"CINEMATICA",         kind:"CINEMATICA",     link:"", focus:0.5,
      src:[{url:"/media/tv/cin-still-01.mp4",   title:"IN TIME SHOOT", sub:"01", file:"IN_TIME_SHOOT_01.MP4"},
           {url:"/media/tv/cin-intime-02.mp4", title:"IN TIME SHOOT", sub:"02", file:"IN_TIME_SHOOT_02.MP4"},
@@ -114,7 +124,9 @@
     titleStrip: true   // title + timecode strip along the bottom
   };
 
-  const root=document.getElementById('eeTv');
+  const root=document.getElementById(uid);
+  const q=n=>root.querySelector('[data-ee="'+n+'"]');
+  if(reel){CHANNELS.length=0;CHANNELS.push({key:'Reel',sat:reelSat,name:'Reel',file:'REEL',kind:'REEL',link:'',focus:0.5,src:reel})}
   const img=root.querySelector('img'),vid=root.querySelector('video'),cv=root.querySelector('.ee-tv__screen canvas'),ctx=cv.getContext('2d');
   const W=320,H=240,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let ch=0,cur=null,curAt=0,switchUntil=0,visible=true,t0=performance.now(),glitchUntil=0,nextGlitch=3000;
@@ -237,30 +249,34 @@
     requestAnimationFrame(frame);
   }
 
-  const keys=document.getElementById('eeKeys');
+  const keys=q('keys');
   function key(num,label,fn,aria){const b=document.createElement('button');b.className='ee-tv__key';b.type='button';
     b.innerHTML='<i>'+num+'</i><span>'+label+'</span>';b.setAttribute('aria-label',aria);b.onclick=fn;keys.appendChild(b);return b}
-  const chKeys=CHANNELS.map((c,i)=>key(i+1,c.key,()=>setCh(i),'Channel '+(i+1)+': '+c.name));
+  const chKeys=reel?[]:CHANNELS.map((c,i)=>key(i+1,c.key,()=>setCh(i),'Channel '+(i+1)+': '+c.name));
+  if(reel){key('◂','Prev',()=>prevClip(),'Previous clip');key('▸','Next',()=>nextClip(),'Next clip')}
   root.classList.toggle('ee-tv--clean',!VHS.on);
   if(VHS.button){const fxKey=key('F','Signal',()=>{VHS.on=!VHS.on;fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on)},'Toggle the signal filter');
     fxKey.classList.add('ee-tv__key--fx');fxKey.setAttribute('aria-pressed',VHS.on)}
-  const skipKey=key('S','Skip',()=>nextClip(),'Next clip on this channel');
-  const openKey=key('0','Watch',()=>{const l=CHANNELS[ch].link;if(l)window.open(l,'_blank','noopener')},'Open the full video');
+  const skipKey=reel?{hidden:true}:key('S','Skip',()=>nextClip(),'Next clip on this channel');
+  const openKey=reel?{hidden:true}:key('0','Watch',()=>{const l=CHANNELS[ch].link;if(l)window.open(l,'_blank','noopener')},'Open the full video');
   const list=c=>Array.isArray(c.src)?c.src:(c.src?[c.src]:[]);
   CHANNELS.forEach(c=>c.i=0);
 
   function load(c){
     const L=list(c);vid.pause();vid.hidden=true;img.hidden=true;
-    cur=null;if(!L.length){skipKey.hidden=true;document.getElementById('eePrompt').innerHTML='C:\\EMPIRE-EYES\\UPLINK&gt; tune <b>'+c.file+'</b> · no signal ';return}const item=L[c.i%L.length],u=typeof item==='string'?item:item.url;
+    cur=null;if(!L.length){skipKey.hidden=true;q('prompt').innerHTML='C:\\EMPIRE-EYES\\UPLINK&gt; tune <b>'+c.file+'</b> · no signal ';return}const item=L[c.i%L.length],u=typeof item==='string'?item:item.url;
     cur=typeof item==='string'?null:item;curAt=performance.now()+(reduce?80:300);
     const fp=(cur&&cur.focus!=null?cur.focus:c.focus);vid.style.objectPosition=img.style.objectPosition='50% '+((fp==null?.5:fp)*100)+'%';
     if(isVideo(u)){vid.loop=L.length===1;vid.src=u;vid.hidden=false;vid.play().catch(()=>{})}else{img.src=u;img.hidden=false}
     const many=L.length>1;skipKey.hidden=!many;
     const name=cur&&cur.file?cur.file:cur&&cur.id?cur.id.toUpperCase().replace(/-/g,'_')+'.MP4':many?c.file+'_'+String(c.i%L.length+1).padStart(2,'0')+'.MP4':c.file;
     if(cur&&cur.title)root.querySelector('.ee-tv__screen canvas').setAttribute('aria-label',[cur.title,cur.sub].filter(Boolean).join(', '));
-    document.getElementById('eePrompt').innerHTML='C:\\EMPIRE-EYES\\UPLINK&gt; tune <b>'+name+'</b>'+(many?' ['+(c.i%L.length+1)+'/'+L.length+']':'')+' ';
+    q('prompt').innerHTML='C:\\EMPIRE-EYES\\UPLINK&gt; tune <b>'+name+'</b>'+(many?' ['+(c.i%L.length+1)+'/'+L.length+']':'')+' ';
+    if(reel)q('ch').textContent=String(c.i%L.length+1).padStart(2,'0')+'/'+String(L.length).padStart(2,'0');
   }
   function nextClip(){const c=CHANNELS[ch],L=list(c);if(L.length<2)return;c.i=(c.i+1)%L.length;
+    switchUntil=performance.now()+(reduce?80:260);load(c)}
+  function prevClip(){const c=CHANNELS[ch],L=list(c);if(L.length<2)return;c.i=(c.i-1+L.length)%L.length;
     switchUntil=performance.now()+(reduce?80:260);load(c)}
   vid.addEventListener('ended',nextClip);
   vid.addEventListener('timeupdate',()=>{const c=CHANNELS[ch];if(c.maxSeconds&&list(c).length>1&&vid.currentTime>=c.maxSeconds)nextClip()});
@@ -270,12 +286,13 @@
     switchUntil=performance.now()+(reduce?80:300);
     load(c);
     const n=String(ch+1).padStart(2,'0');
-    document.getElementById('eeCh').textContent='CH '+n+'/'+String(CHANNELS.length).padStart(2,'0');
+    if(!reel)q('ch').textContent='CH '+n+'/'+String(CHANNELS.length).padStart(2,'0');
     chKeys.forEach((b,k)=>b.setAttribute('aria-pressed',k===ch));
     openKey.hidden=!c.link;
   }
 
-  root.addEventListener('keydown',e=>{if(e.key>='1'&&e.key<=String(CHANNELS.length)){setCh(+e.key-1)}
+  root.addEventListener('keydown',e=>{if(reel){if(e.key==='ArrowRight')nextClip();else if(e.key==='ArrowLeft')prevClip();return}
+    if(e.key>='1'&&e.key<=String(CHANNELS.length)){setCh(+e.key-1)}
     else if(e.key==='ArrowRight')setCh(ch+1);else if(e.key==='ArrowLeft')setCh(ch-1)});
   if('IntersectionObserver' in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(!visible)vid.pause();else if(!vid.hidden)vid.play().catch(()=>{})}).observe(root);
   setCh(0);requestAnimationFrame(frame);
