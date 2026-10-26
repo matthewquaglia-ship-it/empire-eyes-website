@@ -71,7 +71,7 @@
      src:[{url:"/media/tv/teaser-forever.mp4", title:"FOREVER", sub:"MUSIC VIDEO · TEASER", file:"FOREVER_TEASER.MP4"},
           {url:"/media/tv/bts-forever.mp4", title:"FOREVER", sub:"ON SET · MV SHOOT", date:"NOV 11 2025", file:"FOREVER_ON_SET.MP4", focus:0.5},
           {url:"/media/tv/bts-3766.mp4",   title:"ON SET",  sub:"THE CAR SHOT", file:"THE_CAR_SHOT.MP4", focus:0.5},
-          {url:"/media/tv/dv-space-reel.mp4",  title:"DISCO VOLANTE", sub:"ALBUM COMING SOON", file:"ALBUM_COMING_SOON.MP4", focus:0.5},
+          {url:"/media/tv/dv-space-reel.mp4",  title:"DISCO VOLANTE", sub:"ALBUM COMING SOON", file:"ALBUM_COMING_SOON.MP4", focus:0.5, corner:false},
           {url:"/media/tv/dv-coming-soon.mp4", title:"DISCO VOLANTE", sub:"COMING SOON", file:"DISCO_VOLANTE.MP4", focus:0.5}]},
     {key:"Channel_EE", sat:"RAI-2",     name:"Channel EE",            file:"EE",                 kind:"EMPIRE EYES",    link:"", focus:0.5,
      src:[{url:"/media/tv/mv-intime.mp4",      title:"IN TIME",     sub:"MUSIC VIDEO", file:"IN_TIME.MP4"},
@@ -164,6 +164,7 @@
 
   // Corner display (satellite name + live light): drawn with or without the VHS filter
   function cornerOSD(t){
+    if(cur&&cur.corner===false)return;   // a clip can hide the satellite name with corner:false
     if(VHS.osd){ctx.font='20px VT323, monospace';const live=list(CHANNELS[ch]).length>0,sat=CHANNELS[ch].sat||('SAT-'+(ch+1));
       ctx.textAlign='right';ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillText(sat,307,27);ctx.fillStyle='#f2f2f2';ctx.fillText(sat,306,26);
       if(live&&Math.floor(t*1.2)%2){ctx.fillStyle='#ff3b30';ctx.beginPath();ctx.arc(306-ctx.measureText(sat).width-10,20,4,0,7);ctx.fill()}}
