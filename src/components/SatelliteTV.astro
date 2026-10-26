@@ -1,0 +1,253 @@
+---
+// Empire Eyes Worldwide satellite TV: a DOS-style frame that flips between
+// VHS-filtered clips. Edit the CHANNELS list inside the script below.
+// Clips live in public/media/tv/ (small, silent, H.264 MP4s).
+---
+<style is:global>
+/* A plain DOS-style frame: title bar, screen, prompt line, function-key bar. Scoped to .ee-tv */
+.ee-tv{--ee-bg:#000;--ee-fg:#aaaaaa;--ee-hi:#ffffff;--ee-cyan:#00aaaa;--ee-bar:#aaaaaa;--ee-green:#55ff55;
+  width:100%;max-width:640px;margin:0 auto;background:var(--ee-bg);color:var(--ee-fg);
+  font-family:"VT323","Courier New",monospace;font-size:20px;line-height:1.25;border:4px double var(--ee-bar);padding:6px}
+.ee-tv [hidden]{display:none!important}
+.ee-tv__title{display:flex;justify-content:space-between;gap:8px;background:var(--ee-bar);color:#000;padding:0 8px;white-space:nowrap;overflow:hidden}
+.ee-tv__title span:first-child{overflow:hidden;text-overflow:ellipsis}
+.ee-tv__name{display:flex;align-items:center;gap:8px;min-width:0}
+.ee-tv__name>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ee-tv__globe{flex:none;width:21px;height:21px;image-rendering:pixelated;image-rendering:crisp-edges}
+@media (max-width:440px){.ee-tv__name>span:last-child{display:none}}   /* phones: drop "LIVE VIA SATELLITE" so the name fits */
+.ee-tv__screen{position:relative;aspect-ratio:4/3;max-width:100%;margin:6px 0;background:#000;border:2px solid #555;overflow:hidden}
+.ee-tv__screen>*{position:absolute;inset:0;width:100%;height:100%}
+.ee-tv__screen img,.ee-tv__screen video{object-fit:cover;opacity:.01}   /* the canvas draws them with the filter */
+.ee-tv__screen canvas{filter:saturate(1.3) contrast(1.08) brightness(1.06) sepia(.1)}
+.ee-tv--clean .ee-tv__screen canvas{filter:none}
+.ee-tv__fx{pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),
+  radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.55) 100%)}
+.ee-tv--clean .ee-tv__fx{background:none}
+.ee-tv__prompt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ee-fg);min-height:1.25em}
+.ee-tv__prompt b{font-weight:400;color:var(--ee-hi)}
+.ee-tv__cur{display:inline-block;width:.55em;height:1em;background:var(--ee-fg);vertical-align:-.15em;animation:ee-blink 1s steps(1) infinite}
+@keyframes ee-blink{50%{opacity:0}}
+.ee-tv__keys{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:6px}
+.ee-tv__key{font:inherit;display:inline-flex;align-items:stretch;padding:0;border:0;background:none;cursor:pointer;color:inherit}
+.ee-tv__key i{font-style:normal;color:var(--ee-hi);padding:0 2px}
+.ee-tv__key span{background:var(--ee-cyan);color:#000;padding:0 6px;min-width:5ch}
+.ee-tv__key:hover span,.ee-tv__key:focus-visible span{background:var(--ee-hi)}
+.ee-tv__key[aria-pressed="true"] span{background:var(--ee-green)}
+.ee-tv__key:focus-visible{outline:1px dashed var(--ee-hi);outline-offset:2px}
+.ee-tv__link{color:var(--ee-cyan);text-decoration:none}
+.ee-tv__link:hover{color:var(--ee-hi)}
+@media (prefers-reduced-motion:reduce){.ee-tv__cur{animation:none}}
+</style>
+
+<div class="ee-tv" id="eeTv">
+  <div class="ee-tv__title"><span class="ee-tv__name"><span id="eeTitle">EMPIRE EYES WORLDWIDE</span><canvas class="ee-tv__globe" width="21" height="21" aria-hidden="true"></canvas><span>LIVE VIA SATELLITE</span></span><span id="eeCh">CH 01/04</span></div>
+  <div class="ee-tv__screen">
+    <img alt="" hidden>
+    <video muted loop playsinline autoplay preload="metadata" hidden></video>
+    <canvas width="320" height="240"></canvas>
+    <div class="ee-tv__fx"></div>
+  </div>
+  <div class="ee-tv__prompt" aria-live="polite"><span id="eePrompt"></span><span class="ee-tv__cur"></span></div>
+  <div class="ee-tv__keys" id="eeKeys" role="group" aria-label="Channels"></div>
+</div>
+
+<script is:inline>
+(function(){
+  /* ---- EDIT THIS LIST ----
+     src:  a .gif, .mp4 or .webm (muted looping MP4/WebM is far smaller than a GIF)
+     file: the name shown in the DOS prompt
+     sat:  the satellite name shown top right on this channel
+     link: optional, adds an "open" key that goes to the full video
+     focus: optional, 0 = keep the top of a tall (phone) clip, 0.5 = middle, 1 = bottom
+     Leave src empty to show a placeholder.
+     A list of clips, src:["a.mp4","b.mp4"], plays them one after another and loops back to the start.
+     maxSeconds: optional, moves to the next clip in a list after this many seconds.
+     TITLE CARD: give a clip a title by writing it as {url:"clip.mp4", title:"FOREVER", sub:"MV TEASER", date:"NOV 11 2025"}
+     instead of just "clip.mp4". title and sub sit bottom left, date sits bottom right under the tape counter (all optional).
+     A clip can also set its own file (name in the prompt) and focus. */
+  const CHANNELS = [
+    {key:"Premiere",   sat:"MEDIASAT",  name:"Forever · MV teaser",   file:"FOREVER_TEASER.MP4", kind:"WORLD PREMIERE", link:"", focus:0.35,
+     src:{url:"/media/tv/teaser-forever.mp4", title:"FOREVER", sub:"MUSIC VIDEO · TEASER", file:"FOREVER_TEASER.MP4"}},
+    {key:"Channel_EE", sat:"RAI-2",     name:"Channel EE",            file:"EE",                 kind:"EMPIRE EYES",    link:"", focus:0.5,
+     src:[{url:"/media/tv/mv-intime.mp4",      title:"IN TIME",     sub:"MUSIC VIDEO", file:"IN_TIME.MP4"},
+          {url:"/media/tv/ee-setmefree.mp4",   title:"SET ME FREE", sub:"CANVAS",      file:"SET_ME_FREE.MP4", focus:0.6},
+          {url:"/media/tv/ee-satori.mp4",      title:"SATORI",      sub:"CANVAS",      file:"SATORI.MP4"},
+          {url:"/media/tv/ee-smf-canvas.mp4",  title:"SET ME FREE", sub:"CANVAS II",   file:"SET_ME_FREE_II.MP4"},
+          {url:"/media/tv/ee-stw06.mp4",       title:"TILT",        sub:"ALBUM OUT NOW", file:"TILT_STW06.MP4"}]},
+    {key:"BTS",  sat:"ASIA_SAT8", name:"Behind the scenes",     file:"BTS",                kind:"BACKSTAGE",      link:"", focus:0.5,
+     src:[{url:"/media/tv/bts-forever.mp4", title:"FOREVER", sub:"ON SET · MV SHOOT", date:"NOV 11 2025", file:"FOREVER_ON_SET.MP4"},
+          {url:"/media/tv/bts-3766.mp4",   title:"ON SET",  sub:"THE CAR SHOT", file:"THE_CAR_SHOT.MP4"},
+          {url:"/media/tv/bts-0141.mp4",   title:"IN THE EDIT", sub:"TIMELINE 1", file:"IN_THE_EDIT.MP4"}]},
+    {key:"Cinematica",     sat:"PAS-2",     name:"Street · night walk",   file:"STREET.GIF",         kind:"STREET FEED",    src:"", link:""}
+  ];
+  /* ---- VHS FILTER SETTINGS ---- */
+  const VHS = {
+    on: true,          // start with the filter on (the FX key toggles it)
+    softness: 0.5,     // 0 = sharp, 1 = very smeary (lower = more resolution)
+    chroma: 2.5,       // colour fringing in pixels
+    jitter: 1,         // horizontal line wobble
+    tracking: true,    // rolling tracking band
+    osd: true,         // satellite name in the corner (each channel's sat:) with the live light
+    titleStrip: true   // title + timecode strip along the bottom
+  };
+
+  const root=document.getElementById('eeTv');
+  const img=root.querySelector('img'),vid=root.querySelector('video'),cv=root.querySelector('.ee-tv__screen canvas'),ctx=cv.getContext('2d');
+  const W=320,H=240,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ch=0,cur=null,curAt=0,switchUntil=0,visible=true,t0=performance.now(),glitchUntil=0,nextGlitch=3000;
+
+  const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return [c,c.getContext('2d')]};
+  const [src,sctx]=mk(W,H);           // source frame
+  const lw=Math.max(80,Math.round(W*(1-VHS.softness*.7))),lh=Math.round(lw*H/W);
+  const [low,lctx]=mk(lw,lh);          // downscaled for lofi softness
+  const [base,bctx]=mk(W,H);
+  const [tmp,tctx]=mk(W,H);
+  const [rgb,rctx]=mk(W,H);
+  const noise=[];for(let i=0;i<6;i++){const [c,x]=mk(80,60),d=x.createImageData(80,60);
+    for(let p=0;p<d.data.length;p+=4){const v=Math.random()*220;d.data[p]=d.data[p+1]=d.data[p+2]=v;d.data[p+3]=255}x.putImageData(d,0,0);noise.push(c)}
+  const isVideo=s=>/\.(mp4|webm|mov)(\?|$)/i.test(s);
+
+  function line(c,s,y,col){c.font='20px VT323, monospace';c.fillStyle=col;c.textAlign='left';c.fillText(s,16,y)}
+  function placeholder(c,ch,t){
+    c.fillStyle='#08080c';c.fillRect(0,0,W,H);
+    ['#c0c0c0','#c0c000','#00c0c0','#00c000','#c000c0','#c00000','#0000c0'].forEach((k,i)=>{c.fillStyle=k;c.fillRect(i*W/7,0,W/7+1,H*.62)});
+    ['#0000c0','#111','#c000c0','#111','#00c0c0','#111','#c0c0c0'].forEach((k,i)=>{c.fillStyle=k;c.fillRect(i*W/7,H*.62,W/7+1,H*.08)});
+    c.fillStyle='rgba(0,0,0,.78)';c.fillRect(0,H*.7,W,H*.3);
+    c.fillStyle='#000';c.fillRect(W/2-86,58,172,40);
+    c.font='32px VT323, monospace';c.textAlign='center';c.fillStyle='#ffffff';c.fillText('NO SIGNAL',W/2,88);
+    c.font='18px VT323, monospace';c.fillStyle='#ffffff';c.fillText(ch.name.toUpperCase()+' · '+ch.kind,W/2,190);
+    c.fillStyle='#aaaaaa';c.fillText('PLEASE STAND BY',W/2,210);
+    c.fillStyle='#777777';c.font='16px VT323, monospace';c.fillText('BROADCASTING FROM ADELAIDE, AUS',W/2,229);
+  }
+  function drawCover(c,el,ew,eh,f){if(!ew||!eh)return false;const s=Math.max(W/ew,H/eh),w=ew*s,h=eh*s,fy=f==null?.5:f;c.drawImage(el,(W-w)/2,(H-h)*fy,w,h);return true}
+
+  function vhs(t,now){
+    // 1. lofi softness: down then up
+    lctx.imageSmoothingEnabled=true;lctx.drawImage(src,0,0,lw,lh);
+    bctx.imageSmoothingEnabled=true;bctx.drawImage(low,0,0,W,H);
+    // 2. chroma fringing: split R, G, B with offsets, add back together
+    rctx.globalCompositeOperation='source-over';rctx.fillStyle='#000';rctx.fillRect(0,0,W,H);
+    const off=VHS.chroma*(now<glitchUntil?3:1);
+    [['#ff0000',off,0],['#00ff00',0,0],['#0000ff',-off,1]].forEach(([col,dx,dy])=>{
+      tctx.globalCompositeOperation='source-over';tctx.clearRect(0,0,W,H);tctx.drawImage(base,dx,dy);
+      tctx.globalCompositeOperation='multiply';tctx.fillStyle=col;tctx.fillRect(0,0,W,H);
+      rctx.globalCompositeOperation='lighter';rctx.drawImage(tmp,0,0)});
+    rctx.globalCompositeOperation='source-over';
+    // 3. line wobble, stronger in the tracking band and during glitches
+    ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+    const band=VHS.tracking&&!reduce?((t*22)%(H+80))-40:-999;
+    const g=now<glitchUntil;const jump=g?Math.round(Math.random()*8-4):0;
+    for(let y=0;y<H;y+=2){
+      let dx=reduce?0:Math.sin(y*.09+t*7)*.6*VHS.jitter;
+      const inBand=y>band&&y<band+18;if(inBand)dx+=(Math.random()*6-3)*VHS.jitter;
+      if(g&&Math.random()<.15)dx+=Math.random()*14-7;
+      ctx.drawImage(rgb,0,y,W,2,dx,y+jump,W,2);
+    }
+    // 4. tracking band noise + head-switching noise at the bottom
+    if(band>-40){ctx.globalAlpha=.28;ctx.drawImage(noise[Math.floor(t*30)%noise.length],0,0,80,5,0,band,W,18);ctx.globalAlpha=1;
+      ctx.fillStyle='rgba(255,255,255,.12)';for(let i=0;i<3;i++)ctx.fillRect(Math.random()*W,band+Math.random()*16,20+Math.random()*60,1)}
+    ctx.globalAlpha=.5;ctx.drawImage(noise[Math.floor(t*24+3)%noise.length],0,0,80,3,(Math.random()*8-4),H-7,W,7);ctx.globalAlpha=1;
+    // 5. grain + bloom-ish lift
+    if(!reduce){ctx.globalAlpha=.08;ctx.drawImage(noise[Math.floor(t*24)%noise.length],0,0,W,H);ctx.globalAlpha=1}
+    ctx.globalCompositeOperation='screen';ctx.globalAlpha=.12;ctx.drawImage(low,0,0,W,H);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+    // 6. on-screen display
+    if(VHS.osd){ctx.font='20px VT323, monospace';const live=list(CHANNELS[ch]).length>0,sat=CHANNELS[ch].sat||('SAT-'+(ch+1));
+      ctx.textAlign='right';ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillText(sat,307,27);ctx.fillStyle='#f2f2f2';ctx.fillText(sat,306,26);
+      if(live&&Math.floor(t*1.2)%2){ctx.fillStyle='#ff3b30';ctx.beginPath();ctx.arc(306-ctx.measureText(sat).width-10,20,4,0,7);ctx.fill()}}
+  }
+
+  /* VHS title card: camcorder-style text with its own colour fringe and wobble */
+  function osdText(s,x,y,size,align,a,t,col){
+    ctx.save();ctx.font=size+'px VT323, monospace';ctx.textAlign=align;ctx.textBaseline='alphabetic';
+    ctx.globalAlpha=a*.85;ctx.fillStyle='#000';ctx.fillText(s,x+2,y+2);           // drop shadow
+    ctx.globalCompositeOperation='lighter';ctx.globalAlpha=a*.55;
+    ctx.fillStyle='#ff2a2a';ctx.fillText(s,x+1.6,y);ctx.fillStyle='#2a6bff';ctx.fillText(s,x-1.6,y);   // chroma fringe
+    ctx.globalCompositeOperation='source-over';ctx.globalAlpha=a;ctx.fillStyle=col||'#f4f1ea';ctx.fillText(s,x,y);
+    ctx.restore();return ctx.measureText?0:0}
+  function titleCard(t,now){
+    // Static bottom strip, always on: "TITLE · SUB" on the left, tape counter on the right (date above it)
+    const G='#f4f1ea';
+    const sg=ctx.createLinearGradient(0,H-44,0,H);sg.addColorStop(0,'rgba(0,0,0,0)');sg.addColorStop(1,'rgba(0,0,0,.5)');
+    ctx.fillStyle=sg;ctx.fillRect(0,H-44,W,44);
+    const label=cur?[cur.title,cur.sub].filter(Boolean).join(' · '):'';
+    if(label)osdText(label,14,228,14,'left',1,t,G);
+    const s=Math.floor(vid.hidden?(now-curAt)/1000:vid.currentTime||0);
+    osdText(Math.floor(s/3600)+':'+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0'),306,228,14,'right',1,t,G);
+    if(cur&&cur.date)osdText(cur.date,306,213,14,'right',1,t,G);
+  }
+
+
+  /* Wireframe globe in the title bar: 21x21 pixels, one line per pixel */
+  const gcv=root.querySelector('.ee-tv__globe'),gctx=gcv.getContext('2d'),GS=21,GR=10,GC=10;
+  let gLast=0;
+  function globe(now){
+    if(now-gLast<90&&!reduce)return;gLast=now;
+    const id=gctx.createImageData(GS,GS),col=getComputedStyle(gcv).color.match(/\d+/g)||[0,0,0];
+    const set=(x,y)=>{x=Math.round(x+GC);y=Math.round(y+GC);if(x<0||y<0||x>=GS||y>=GS)return;const i=(y*GS+x)*4;id.data[i]=+col[0];id.data[i+1]=+col[1];id.data[i+2]=+col[2];id.data[i+3]=255};
+    for(let a=0;a<360;a+=2){const r=a*Math.PI/180;set(Math.cos(r)*GR,Math.sin(r)*GR)}              // outline
+    [-0.95,-0.45,0,0.45,0.95].forEach(l=>{const y=Math.sin(l)*GR,w=Math.cos(l)*GR;for(let x=-w;x<=w;x+=.3)set(x,y)}); // latitudes
+    const spin=reduce?0.4:(now/1000)*(Math.PI*2/5);                                                // one turn every 5s
+    for(let k=0;k<8;k++){const lon=spin+k*Math.PI/4;if(Math.cos(lon)<=0)continue;                  // front-facing meridians
+      for(let y=-GR;y<=GR;y+=.2)set(Math.sin(lon)*GR*Math.sqrt(1-(y/GR)**2),y)}
+    gctx.putImageData(id,0,0);
+  }
+
+  function frame(now){
+    globe(now);
+    if(visible){const c=CHANNELS[ch],t=(now-t0)/1000;
+      if(!reduce&&now>nextGlitch){glitchUntil=now+120+Math.random()*180;nextGlitch=now+4000+Math.random()*7000}
+      if(now<switchUntil){ctx.drawImage(noise[Math.floor(Math.random()*noise.length)],0,0,W,H)}
+      else{
+        let ok=false;
+        if(c.src&&!vid.hidden&&vid.readyState>=2)ok=drawCover(sctx,vid,vid.videoWidth,vid.videoHeight,cur&&cur.focus!=null?cur.focus:c.focus);
+        else if(c.src&&!img.hidden&&img.complete)ok=drawCover(sctx,img,img.naturalWidth,img.naturalHeight,cur&&cur.focus!=null?cur.focus:c.focus);
+        if(!ok)placeholder(sctx,c,t);
+        if(VHS.on)vhs(t,now);else ctx.drawImage(src,0,0);
+        if(ok&&VHS.titleStrip)titleCard(t,now);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const keys=document.getElementById('eeKeys');
+  function key(num,label,fn,aria){const b=document.createElement('button');b.className='ee-tv__key';b.type='button';
+    b.innerHTML='<i>'+num+'</i><span>'+label+'</span>';b.setAttribute('aria-label',aria);b.onclick=fn;keys.appendChild(b);return b}
+  const chKeys=CHANNELS.map((c,i)=>key(i+1,c.key,()=>setCh(i),'Channel '+(i+1)+': '+c.name));
+  const fxKey=key('F','Signal',()=>{VHS.on=!VHS.on;fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on)},'Toggle the signal filter');
+  fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on);
+  const skipKey=key('S','Skip',()=>nextClip(),'Next clip on this channel');
+  const openKey=key('0','Watch',()=>{const l=CHANNELS[ch].link;if(l)window.open(l,'_blank','noopener')},'Open the full video');
+  const list=c=>Array.isArray(c.src)?c.src:(c.src?[c.src]:[]);
+  CHANNELS.forEach(c=>c.i=0);
+
+  function load(c){
+    const L=list(c);vid.pause();vid.hidden=true;img.hidden=true;
+    cur=null;if(!L.length){skipKey.hidden=true;document.getElementById('eePrompt').innerHTML='C:\\EMPIRE-EYES\\UPLINK&gt; tune <b>'+c.file+'</b> · no signal ';return}const item=L[c.i%L.length],u=typeof item==='string'?item:item.url;
+    cur=typeof item==='string'?null:item;curAt=performance.now()+(reduce?80:300);
+    if(isVideo(u)){vid.loop=L.length===1;vid.src=u;vid.hidden=false;vid.play().catch(()=>{})}else{img.src=u;img.hidden=false}
+    const many=L.length>1;skipKey.hidden=!many;
+    const name=cur&&cur.file?cur.file:cur&&cur.id?cur.id.toUpperCase().replace(/-/g,'_')+'.MP4':many?c.file+'_'+String(c.i%L.length+1).padStart(2,'0')+'.MP4':c.file;
+    if(cur&&cur.title)root.querySelector('.ee-tv__screen canvas').setAttribute('aria-label',[cur.title,cur.sub].filter(Boolean).join(', '));
+    document.getElementById('eePrompt').innerHTML='C:\\EMPIRE-EYES\\UPLINK&gt; tune <b>'+name+'</b>'+(many?' ['+(c.i%L.length+1)+'/'+L.length+']':'')+' ';
+  }
+  function nextClip(){const c=CHANNELS[ch],L=list(c);if(L.length<2)return;c.i=(c.i+1)%L.length;
+    switchUntil=performance.now()+(reduce?80:260);load(c)}
+  vid.addEventListener('ended',nextClip);
+  vid.addEventListener('timeupdate',()=>{const c=CHANNELS[ch];if(c.maxSeconds&&list(c).length>1&&vid.currentTime>=c.maxSeconds)nextClip()});
+
+  function setCh(i){
+    ch=(i+CHANNELS.length)%CHANNELS.length;const c=CHANNELS[ch];
+    switchUntil=performance.now()+(reduce?80:300);
+    load(c);
+    const n=String(ch+1).padStart(2,'0');
+    document.getElementById('eeCh').textContent='CH '+n+'/'+String(CHANNELS.length).padStart(2,'0');
+    chKeys.forEach((b,k)=>b.setAttribute('aria-pressed',k===ch));
+    openKey.hidden=!c.link;
+  }
+
+  root.addEventListener('keydown',e=>{if(e.key>='1'&&e.key<=String(CHANNELS.length)){setCh(+e.key-1)}
+    else if(e.key==='ArrowRight')setCh(ch+1);else if(e.key==='ArrowLeft')setCh(ch-1)});
+  if('IntersectionObserver' in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(!visible)vid.pause();else if(!vid.hidden)vid.play().catch(()=>{})}).observe(root);
+  setCh(0);requestAnimationFrame(frame);
+})();
+</script>

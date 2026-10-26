@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import SatelliteTV from "../components/SatelliteTV.astro";
 import "../styles/global.css";
 import { artistLinks, socialLinks, releases, artist, videos } from "../data/links";
 
@@ -127,6 +128,9 @@ const jsonLd = {
     <!-- Watch -->
     <section class="section" id="watch">
       <h2 class="section-label">Watch</h2>
+      <div class="satellite-tv">
+        <SatelliteTV />
+      </div>
       <ul class="release-list">
         {
           videos.map((video) => (

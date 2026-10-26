@@ -578,3 +578,8 @@ body::before {
     padding-right: max(var(--gutter), calc((100vw - var(--max-w)) / 2));
   }
 }
+
+/* ─── SATELLITE TV (Watch section) ─── */
+.satellite-tv {
+  margin-bottom: 1.5rem;
+}
