@@ -36,7 +36,7 @@ export const videos = [
     label: "Official Music Video",
     year: 2024,
     // READ write-up (paragraphs split on a blank line) and the clips shown in its viewer
-    lore: `In Time was shot over one night in the walkways, lifts and escalators of Adelaide's Festival Centre and railway station precinct: the city after hours, lit only by the fittings left on to keep it running.\n\nThese are frames from that night, and from the small crew who made it.`,
+    lore: `The music video for In Time was the first time I applied my filmmaking to storytelling for one of my songs. The ideas for this film were inspired more by cinematography than narrative. I didn't want something to distract from the music, but something that would accompany it.\n\nThe shots are each focused on telling part of a story, but without any clear direction it leads more into abstraction. Symbolically, I feel the film works better that way, given the ideas grounding the song. "In Time" explores the idea that there is a bigger version of me always waiting, even while I'm lost and confused, running or unsure. That really speaks through the scene where I'm moving up the escalator and down the escalator at the same time.\n\nThe film crew were my siblings, which made the shoot even more special. We hung out in the city on a weeknight and just played with shots that looked cool, and I think that led to the style being abstract.`,
     reel: [
       { url: "/media/tv/cin-still-01.mp4", title: "IN TIME SHOOT", sub: "01", file: "IN_TIME_SHOOT_01.MP4" },
       { url: "/media/tv/cin-intime-02.mp4", title: "IN TIME SHOOT", sub: "02", file: "IN_TIME_SHOOT_02.MP4" },
