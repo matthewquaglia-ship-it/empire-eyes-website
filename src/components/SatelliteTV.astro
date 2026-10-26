@@ -214,7 +214,7 @@
     b.innerHTML='<i>'+num+'</i><span>'+label+'</span>';b.setAttribute('aria-label',aria);b.onclick=fn;keys.appendChild(b);return b}
   const chKeys=CHANNELS.map((c,i)=>key(i+1,c.key,()=>setCh(i),'Channel '+(i+1)+': '+c.name));
   const fxKey=key('F','Signal',()=>{VHS.on=!VHS.on;fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on)},'Toggle the signal filter');
-  fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on);
+  fxKey.classList.add('ee-tv__key--fx');fxKey.setAttribute('aria-pressed',VHS.on);root.classList.toggle('ee-tv--clean',!VHS.on);
   const skipKey=key('S','Skip',()=>nextClip(),'Next clip on this channel');
   const openKey=key('0','Watch',()=>{const l=CHANNELS[ch].link;if(l)window.open(l,'_blank','noopener')},'Open the full video');
   const list=c=>Array.isArray(c.src)?c.src:(c.src?[c.src]:[]);

@@ -583,3 +583,60 @@ body::before {
 .satellite-tv {
   padding-bottom: 2rem;
 }
+
+/* TV restyled to match the site: monochrome, thin borders, site type.
+   The VHS picture stays as is; only the frame around it changes. */
+.satellite-tv .ee-tv {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0;
+  color: var(--dim);
+}
+.satellite-tv .ee-tv__title {
+  background: transparent;
+  color: var(--dim);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  padding: 0.8rem 1rem;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.satellite-tv .ee-tv__name { gap: 0.7rem; }
+.satellite-tv .ee-tv__globe { width: 15px; height: 15px; color: var(--fg); }
+.satellite-tv #eeCh { letter-spacing: 0.2em; }
+.satellite-tv .ee-tv__screen { margin: 0; border: 0; }
+.satellite-tv .ee-tv__prompt {
+  font-size: 15px;
+  color: #666;
+  padding: 0.55rem 1rem 0;
+}
+.satellite-tv .ee-tv__prompt b { color: var(--dim); }
+.satellite-tv .ee-tv__cur { background: #666; }
+.satellite-tv .ee-tv__keys {
+  gap: 0;
+  margin: 0;
+  padding: 0.6rem 0.5rem 0.7rem;
+}
+.satellite-tv .ee-tv__key {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 0.45rem 0.5rem;
+  transition: background 0.1s, color 0.1s;
+}
+.satellite-tv .ee-tv__key i { color: #555; padding: 0 0.45rem 0 0; }
+.satellite-tv .ee-tv__key span { background: none; color: inherit; padding: 0; min-width: 0; }
+.satellite-tv .ee-tv__key:hover,
+.satellite-tv .ee-tv__key:focus-visible { color: var(--fg); }
+.satellite-tv .ee-tv__key:hover span,
+.satellite-tv .ee-tv__key:focus-visible span { background: none; }
+.satellite-tv .ee-tv__key[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.satellite-tv .ee-tv__key[aria-pressed="true"] i { color: var(--bg); opacity: 0.5; }
+.satellite-tv .ee-tv__key[aria-pressed="true"] span { background: none; }
+.satellite-tv .ee-tv__key--fx { margin-left: auto; }
+.satellite-tv .ee-tv__key--fx[aria-pressed="true"] { background: none; color: var(--fg); }
+.satellite-tv .ee-tv__key--fx[aria-pressed="true"] i { color: #555; opacity: 1; }
