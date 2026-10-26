@@ -646,3 +646,6 @@ body::before {
 .satellite-tv--reel .ee-tv__keys { justify-content: center; gap: 0.5rem; }
 .video-lore { min-width: 0; width: 100%; }
 .satellite-tv--reel, .satellite-tv--reel .ee-tv { min-width: 0; max-width: 100%; }
+
+/* Press & contact buttons on the homepage */
+.contact-links { display: flex; flex-direction: column; gap: 0.75rem; }

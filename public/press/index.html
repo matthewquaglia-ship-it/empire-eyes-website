@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Disco Volante — Press — Empire Eyes</title>
+<meta name="description" content="Press kit for Disco Volante, the new album from Empire Eyes. Alternative / Future Pop.">
+<meta property="og:title" content="Disco Volante — Press — Empire Eyes">
+<meta property="og:description" content="Press kit: stream the album, download artwork and photos, copy the blurb and credits.">
+<meta property="og:image" content="https://www.empire-eyes.com/press/img/cover.jpg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: Arcade; src: url("/fonts/ARCADE.TTF") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+*, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #000; --fg: #fff; --border: #222; --dim: #999; --body: #bbb;
+  --font-display: "Arcade", monospace; --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --max-w: 640px; --gutter: 1.5rem; }
+html { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { min-height: 100dvh; background: var(--bg); }
+a { color: inherit; text-decoration: none; }
+body::before { content: ""; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: .025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px; }
+
+.topbar { max-width: var(--max-w); margin: 0 auto; padding: 1.25rem var(--gutter); display: flex; justify-content: space-between; align-items: center; }
+.back, .tag { font-size: .72rem; letter-spacing: .3em; text-transform: uppercase; color: var(--dim); }
+.back:hover { color: var(--fg); }
+
+.content { width: 100%; max-width: var(--max-w); margin: 0 auto; padding: 0 var(--gutter); border: 1px solid var(--border); }
+.section { border-bottom: 1px solid var(--border); padding: 2rem 0; }
+.section:last-child { border-bottom: none; }
+.section-label { font-size: .72rem; font-weight: 400; letter-spacing: .38em; text-transform: uppercase; color: var(--dim); margin-bottom: 1rem; }
+.section-label .note { letter-spacing: .1em; text-transform: none; color: #555; margin-left: .5em; }
+
+.intro { display: flex; flex-direction: column; gap: 1.25rem; }
+.cover { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; border: 1px solid var(--border); }
+.title { font-family: var(--font-display); font-size: clamp(1.8rem, 8vw, 2.8rem); letter-spacing: .12em; line-height: 1; }
+.artist { font-family: var(--font-display); font-size: clamp(.85rem, 3.5vw, 1.1rem); letter-spacing: .35em; color: var(--dim); }
+.meta { font-size: .72rem; letter-spacing: .3em; text-transform: uppercase; color: var(--dim); line-height: 2; }
+
+.text { font-size: .8rem; line-height: 1.8; color: var(--body); letter-spacing: .02em; }
+.text + .text { margin-top: 1em; }
+.text strong { color: var(--fg); font-weight: 500; }
+
+.listen-btn { display: block; border: 1px solid var(--fg); padding: 1.1rem; text-align: center; font-size: .72rem; letter-spacing: .25em; text-transform: uppercase; transition: background .1s, color .1s; }
+.listen-btn:hover { background: var(--fg); color: var(--bg); }
+.kit-btn { margin-top: 1.5rem; background: var(--fg); color: var(--bg); }
+.kit-btn:hover { background: var(--bg); color: var(--fg); }
+.kit-sub { display: block; margin-top: .35rem; font-size: .6rem; letter-spacing: .2em; opacity: .6; }
+.player-slot { margin-bottom: 1rem; }
+.player-slot:empty { display: none; }
+.player-slot iframe { width: 100%; height: 420px; border: 1px solid var(--border); display: block; background: #0a0a0a; }
+.listen-note { margin-top: .9rem; font-size: .7rem; letter-spacing: .05em; color: #666; line-height: 1.6; }
+
+.tracklist { list-style: none; counter-reset: t; }
+.tracklist li { counter-increment: t; display: flex; gap: 1.25rem; padding: .65rem 0; border-top: 1px solid var(--border); font-size: .78rem; letter-spacing: .15em; text-transform: uppercase; }
+.tracklist li:last-child { border-bottom: 1px solid var(--border); }
+.tracklist li::before { content: counter(t, decimal-leading-zero); color: #555; font-variant-numeric: tabular-nums; }
+.tracklist .focus { margin-left: auto; color: var(--dim); font-size: .62rem; letter-spacing: .25em; }
+
+.blurb { border: 1px solid var(--border); padding: 1.1rem 1.25rem; position: relative; }
+.blurb + .blurb { margin-top: 1rem; }
+.blurb-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .6rem; }
+.blurb-kind { font-size: .62rem; letter-spacing: .3em; text-transform: uppercase; color: #666; }
+.copy { background: none; border: none; color: var(--dim); font: inherit; font-size: .62rem; letter-spacing: .3em; text-transform: uppercase; cursor: pointer; padding: .25rem 0; }
+.copy:hover, .copy.done { color: var(--fg); }
+
+.photos { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.photo { display: block; border: 1px solid var(--border); position: relative; overflow: hidden; }
+.photo img { width: 100%; height: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; transition: opacity .2s; }
+.photo.lead img { aspect-ratio: 3/2; }
+.photo.portrait img { aspect-ratio: 2/3; }
+.photo-name { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; padding: 2rem 1rem .8rem;
+  background: linear-gradient(transparent, rgba(0,0,0,.75)); font-size: .66rem; letter-spacing: .3em; text-transform: uppercase; color: var(--fg); pointer-events: none; }
+@media (hover: hover) {
+  .photo-name { opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; }
+  .photo:hover .photo-name, .photo:focus-visible .photo-name { opacity: 1; transform: none; }
+  .photo:hover img { opacity: .85; }
+}
+@media (min-width: 680px) {
+  .photos { grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr 1fr auto; }
+  .photo.lead { grid-column: 1 / -1; }
+  .photo.portrait { grid-row: 2 / 4; }
+  .photo:not(.lead):not(.portrait) img { aspect-ratio: auto; }
+  .photo.wide { grid-column: 1 / -1; }
+  .photos .photo.wide img { aspect-ratio: 16/9; }
+}
+
+.link-list { list-style: none; display: flex; flex-direction: column; }
+.link-item { border-bottom: 1px solid var(--border); }
+.link-item:first-child { border-top: 1px solid var(--border); }
+.link-item a { display: flex; align-items: center; padding: 1rem 1.25rem; gap: .75rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; transition: background .1s, color .1s; }
+.link-item a:hover { background: var(--fg); color: var(--bg); }
+.link-sub { color: #666; letter-spacing: .1em; text-transform: none; font-size: .68rem; }
+.link-item a:hover .link-sub { color: #444; }
+.link-arrow { font-size: .65rem; opacity: .3; margin-left: auto; transition: opacity .1s, transform .1s; }
+.link-item a:hover .link-arrow { opacity: 1; transform: translate(3px); }
+
+.credits { display: grid; grid-template-columns: max-content 1fr; gap: .55rem 1.5rem; font-size: .76rem; }
+.credits dt { color: #666; letter-spacing: .25em; text-transform: uppercase; font-size: .66rem; padding-top: .1rem; }
+.credits dd { color: var(--body); letter-spacing: .03em; }
+
+.footer { padding: 2rem 0 2.5rem; text-align: center; }
+.footer-text { font-size: .56rem; color: #2e2e2e; letter-spacing: .18em; text-transform: uppercase; line-height: 2.2; }
+
+@media (min-width: 680px) {
+  html { font-size: 15px; }
+  .content { max-width: none; border-left: none; border-right: none; padding-left: max(var(--gutter), calc((100vw - var(--max-w)) / 2)); padding-right: max(var(--gutter), calc((100vw - var(--max-w)) / 2)); }
+  .intro { flex-direction: row; align-items: flex-end; gap: 1.5rem; }
+  .intro .cover { width: 260px; flex-shrink: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="/">← Empire Eyes</a>
+  <span class="tag">Press</span>
+</div>
+
+<main class="content">
+
+  <!-- INTRO -->
+  <section class="section">
+    <div class="intro">
+      <img class="cover" src="img/cover.jpg" alt="Disco Volante album artwork">
+      <div>
+        <h1 class="title">DISCO VOLANTE</h1>
+        <p class="artist" style="margin-top:.8rem">EMPIRE EYES</p>
+        <p class="meta" id="k-meta" style="margin-top:1.2rem">Album · 8 tracks · 35 min<br>Alternative / Future Pop<br>Release · Late 2026</p>
+      </div>
+    </div>
+    <a class="listen-btn kit-btn" href="downloads/Empire-Eyes_Disco-Volante_Press-Kit.zip" download>Download press kit <span class="kit-sub">ZIP · photos, cover, text, PDF</span></a>
+  </section>
+
+  <!-- LISTEN -->
+  <section class="section" id="listen">
+    <h2 class="section-label">Listen <span class="note">— private, please don't share</span></h2>
+    <!-- Paste the Songbox / Whyp private embed iframe inside this div. It hides itself while empty. -->
+    <div class="player-slot"></div>
+    <a class="listen-btn" href="/listening-room">Stream the full album →</a>
+    <p class="listen-note">Best heard start to finish, on headphones. WAVs and MP3s available on request.</p>
+  </section>
+
+  <!-- TRACKLIST -->
+  <section class="section">
+    <h2 class="section-label">Tracklist</h2>
+    <ol class="tracklist" id="k-tracks">
+      <li>This Road</li>
+      <li>Kiss Yourself</li>
+      <li>Forever</li>
+      <li>See It All</li>
+      <li>Divided By Me</li>
+      <li>Space Time</li>
+      <li>Take Me There</li>
+      <li>Consolation</li>
+    </ol>
+  </section>
+
+  <!-- BLURBS -->
+  <section class="section">
+    <h2 class="section-label">About the record</h2>
+    <div class="blurb">
+      <div class="blurb-head"><span class="blurb-kind">Short</span><button class="copy" data-target="b-short">Copy</button></div>
+      <p class="text" id="b-short"><em>Disco Volante</em> is the new album from Empire Eyes, the Australian alternative / future pop project of a single artist who wrote, produced, mixed and mastered every second of it alone. Eight tracks, thirty-five minutes, made in a quiet room and meant to be heard the same way.</p>
+    </div>
+    <div class="blurb">
+      <div class="blurb-head"><span class="blurb-kind">Long</span><button class="copy" data-target="b-long">Copy</button></div>
+      <p class="text" id="b-long"><em>Disco Volante</em> is the new album from Empire Eyes, the Australian alternative / future pop project behind 2024's <em>TILT</em>. Every part of it was written, produced, mixed and mastered by one person, alone, with no outside hands on the sound. The result is eight tracks and thirty-five minutes that move as a single piece, from the opening of "This Road" to the close of "Consolation". It isn't background music. It was made slowly, in a quiet room, and it asks for the same attention back: one sitting, start to finish, nothing else on.</p>
+    </div>
+  </section>
+
+  <!-- PRESS RELEASE -->
+  <section class="section">
+    <h2 class="section-label">Press release</h2>
+    <div id="k-release">
+    <p class="text"><strong>Empire Eyes — <em>Disco Volante</em>. Out late 2026.</strong></p>
+    <p class="text">Some records are built to be found in a feed. <em>Disco Volante</em> was built to be sat with. The new album from Empire Eyes runs thirty-five minutes across eight tracks, and it was made entirely by one person: written, performed, produced, mixed and mastered alone.</p>
+    <p class="text">That solitude is audible. The songs move through faith and self-deception, distance and return, with "Divided By Me" at the centre of the record, a song about the gap between grace and self-righteousness. The production leans on space as much as sound. Nothing is there to fill silence.</p>
+    <p class="text">It follows <em>TILT</em> (2024), an album about the distance between what we've built and what's actually there, and the 2026 videos for "Set Me Free" and "Satori 悟り". Where <em>TILT</em> watched the walls thin, <em>Disco Volante</em> steps through.</p>
+    <p class="text">Empire Eyes is releasing the album quietly and without a campaign, on the belief that one person hearing the whole thing is worth more than a million hearing a snippet. The ask is simple: play it once, in order, somewhere quiet.</p>
+    </div>
+  </section>
+
+  <!-- PHOTOS & DOWNLOADS -->
+  <section class="section">
+    <h2 class="section-label">Artwork &amp; photos <span class="note">— free to use with credit</span></h2>
+    <div class="photos">
+      <a class="photo lead" href="downloads/Empire-Eyes_in-the-studio.jpg" download><img src="img/in-the-studio.jpg" alt="Empire Eyes in the studio" loading="lazy"><span class="photo-name">In the studio <span>↓</span></span></a>
+      <a class="photo portrait" href="downloads/Empire-Eyes_studio-portrait.jpg" download><img src="img/studio-portrait.jpg" alt="Empire Eyes studio portrait" loading="lazy"><span class="photo-name">Studio portrait <span>↓</span></span></a>
+      <a class="photo" href="downloads/Empire-Eyes_press-01.jpg" download><img src="img/press-01.jpg" alt="Empire Eyes press photo, blue" loading="lazy"><span class="photo-name">Press photo 01 <span>↓</span></span></a>
+      <a class="photo" href="downloads/Empire-Eyes_press-02.jpg" download><img src="img/press-02.jpg" alt="Empire Eyes press photo, violet" loading="lazy"><span class="photo-name">Press photo 02 <span>↓</span></span></a>
+      <a class="photo wide" href="downloads/Empire-Eyes_doorway.jpg" download><img src="img/doorway.jpg" alt="Empire Eyes standing by a doorway" loading="lazy"><span class="photo-name">Doorway <span>↓</span></span></a>
+    </div>
+    <ul class="link-list" style="margin-top:1.25rem">
+      <li class="link-item"><a href="downloads/Empire-Eyes_Disco-Volante_cover.jpg" download>Album cover <span class="link-sub">2390 × 2390 JPG</span><span class="link-arrow">↓</span></a></li>
+      <li class="link-item"><a href="downloads/Empire-Eyes_in-the-studio.jpg" download>In the studio <span class="link-sub">2576 × 1717 JPG</span><span class="link-arrow">↓</span></a></li>
+      <li class="link-item"><a href="downloads/Empire-Eyes_studio-portrait.jpg" download>Studio portrait <span class="link-sub">1717 × 2576 JPG</span><span class="link-arrow">↓</span></a></li>
+      <li class="link-item"><a href="downloads/Empire-Eyes_press-01.jpg" download>Press photo 01 <span class="link-sub">2576 × 1450 JPG</span><span class="link-arrow">↓</span></a></li>
+      <li class="link-item"><a href="downloads/Empire-Eyes_press-02.jpg" download>Press photo 02 <span class="link-sub">2576 × 1450 JPG</span><span class="link-arrow">↓</span></a></li>
+      <li class="link-item"><a href="downloads/Empire-Eyes_doorway.jpg" download>Doorway <span class="link-sub">2576 × 1449 JPG</span><span class="link-arrow">↓</span></a></li>
+    </ul>
+    <a class="listen-btn kit-btn" href="downloads/Empire-Eyes_Disco-Volante_Press-Kit.zip" download>Download press kit <span class="kit-sub">ZIP · photos, cover, text, PDF</span></a>
+    <p class="listen-note">Photos: Empire Eyes. Artwork: Empire Eyes.</p>
+  </section>
+
+
+  <!-- CREDITS -->
+  <section class="section">
+    <h2 class="section-label">Credits</h2>
+    <dl class="credits" id="k-credits">
+      <dt>Artist</dt><dd>Empire Eyes</dd>
+      <dt>Written</dt><dd>Empire Eyes</dd>
+      <dt>Produced</dt><dd>Empire Eyes</dd>
+      <dt>Mixed</dt><dd>Empire Eyes</dd>
+      <dt>Mastered</dt><dd>Empire Eyes</dd>
+      <dt>Artwork</dt><dd>Empire Eyes</dd>
+      <dt>Genre</dt><dd>Alternative / Future Pop</dd>
+      <dt>From</dt><dd>Australia</dd>
+    </dl>
+  </section>
+
+  <!-- BIO -->
+  <section class="section">
+    <h2 class="section-label">Artist</h2>
+    <div id="k-bio">
+    <p class="text">Empire Eyes is an alternative / future pop project from Australia, made by one person across music, film and photography. The work circles the same questions in each form: what's real underneath what we've built, and what it costs to keep looking.</p>
+    <p class="text">Releases include the single "In Time" (2023), the album <em>TILT</em> (2024), and the music videos "Set Me Free" and "Satori 悟り" (2026). <em>Disco Volante</em> is the second album.</p>
+    </div>
+  </section>
+
+  <!-- MORE -->
+  <section class="section">
+    <h2 class="section-label">Previous work</h2>
+    <ul class="link-list">
+      <li class="link-item"><a href="/releases/tilt">TILT <span class="link-sub">Album · 2024</span><span class="link-arrow">→</span></a></li>
+      <li class="link-item"><a href="https://www.youtube.com/watch?v=u6ERoY_wHrM">Set Me Free <span class="link-sub">Video · 2026</span><span class="link-arrow">→</span></a></li>
+      <li class="link-item"><a href="https://www.youtube.com/watch?v=kSdhvDhXHv8">Satori 悟り <span class="link-sub">Video · 2026</span><span class="link-arrow">→</span></a></li>
+      <li class="link-item"><a href="https://open.spotify.com/artist/6fvpctR3TvJWAnRI0Q8wWe">Spotify <span class="link-sub">Artist page</span><span class="link-arrow">→</span></a></li>
+      <li class="link-item"><a href="https://empireeyes.bandcamp.com/">Bandcamp <span class="link-sub">Artist page</span><span class="link-arrow">→</span></a></li>
+    </ul>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section">
+    <h2 class="section-label">Contact</h2>
+    <a class="listen-btn" id="k-contact" href="mailto:mgmt@empire-eyes.com">mgmt@empire-eyes.com</a>
+    <p class="listen-note">Interviews, WAVs, additional photos.</p>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-text">© 2026 Empire Eyes<br>ArteMusique</p>
+  </footer>
+</main>
+
+<script>
+document.querySelectorAll('.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.dataset.target);
+    var txt = el ? el.innerText.trim() : '';
+    function done() { btn.textContent = 'Copied'; btn.classList.add('done'); setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1600); }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(done, fallback); }
+      else { fallback(); }
+    } catch (e) { fallback(); }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      try { document.execCommand('copy'); done(); } catch (e) {}
+    }
+  });
+});
+</script>
+</body>
+</html>
