@@ -27,6 +27,7 @@ tracks = [txt(li) for li in soup.select("#k-tracks li")]
 short = txt(soup.select_one("#b-short"))
 long_ = txt(soup.select_one("#b-long"))
 release = paras("k-release")
+statement = paras("b-statement")
 bio = paras("k-bio")
 credits = list(zip([txt(d) for d in soup.select("#k-credits dt")], [txt(d) for d in soup.select("#k-credits dd")]))
 contact = txt(soup.select_one("#k-contact"))
@@ -36,6 +37,7 @@ photos = sorted(p for p in DL.glob("*.jpg"))
 # ---- plain text ----
 L = ["EMPIRE EYES — DISCO VOLANTE", "Press kit", "", *meta, "", f"Online: {PAGE_URL}", f"Listen (private): {listen}", f"Contact: {contact}", "",
      "TRACKLIST", *[f"{i:02d}  {t}" for i, t in enumerate(tracks, 1)], "",
+     "IN THE ARTIST'S WORDS", *sum(([p, ""] for p in statement), []),
      "SHORT BLURB", short, "", "LONG BLURB", long_, "",
      "PRESS RELEASE", *sum(([p, ""] for p in release), []),
      "ARTIST", *sum(([p, ""] for p in bio), []),
@@ -76,6 +78,7 @@ table {{ border-collapse:collapse; font-size:8.5pt; }} td {{ padding:.6mm 6mm .6
 <img class="photo" src="{img64('in-the-studio.jpg')}">
 <div class="break"></div>
 <div class="label" style="border-top:none;margin-top:0;padding-top:0">Press release</div>{''.join(f'<p>{e(p)}</p>' for p in release)}
+<div class="label">In the artist's words</div>{''.join(f'<p>{e(p)}</p>' for p in statement)}
 <div class="label">Artist</div>{''.join(f'<p>{e(p)}</p>' for p in bio)}
 <div class="label">Short blurb</div><p>{e(short)}</p>
 <div class="label">Listen · Contact</div>
