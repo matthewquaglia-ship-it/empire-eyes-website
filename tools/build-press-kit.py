@@ -30,10 +30,11 @@ release = paras("k-release")
 bio = paras("k-bio")
 credits = list(zip([txt(d) for d in soup.select("#k-credits dt")], [txt(d) for d in soup.select("#k-credits dd")]))
 contact = txt(soup.select_one("#k-contact"))
+listen = soup.select_one("#k-listen")["href"]
 photos = sorted(p for p in DL.glob("*.jpg"))
 
 # ---- plain text ----
-L = ["EMPIRE EYES — DISCO VOLANTE", "Press kit", "", *meta, "", f"Online: {PAGE_URL}", f"Contact: {contact}", "",
+L = ["EMPIRE EYES — DISCO VOLANTE", "Press kit", "", *meta, "", f"Online: {PAGE_URL}", f"Listen (private): {listen}", f"Contact: {contact}", "",
      "TRACKLIST", *[f"{i:02d}  {t}" for i, t in enumerate(tracks, 1)], "",
      "SHORT BLURB", short, "", "LONG BLURB", long_, "",
      "PRESS RELEASE", *sum(([p, ""] for p in release), []),
@@ -78,7 +79,7 @@ table {{ border-collapse:collapse; font-size:8.5pt; }} td {{ padding:.6mm 6mm .6
 <div class="label">Artist</div>{''.join(f'<p>{e(p)}</p>' for p in bio)}
 <div class="label">Short blurb</div><p>{e(short)}</p>
 <div class="label">Listen · Contact</div>
-<p>Stream, downloads and photos: {e(PAGE_URL)}<br>Contact: {e(contact)}</p>
+<p>Listen (private): {e(listen)}<br>Press page: {e(PAGE_URL)}<br>Contact: {e(contact)}</p>
 <p class="foot">Hi-res photos and cover are in the Photos folder of this kit. Free to use with credit: Empire Eyes.</p>
 </body></html>"""
 
