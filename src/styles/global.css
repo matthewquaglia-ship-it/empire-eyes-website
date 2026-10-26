@@ -640,3 +640,68 @@ body::before {
 .satellite-tv .ee-tv__key--fx { margin-left: auto; }
 .satellite-tv .ee-tv__key--fx[aria-pressed="true"] { background: none; color: var(--fg); }
 .satellite-tv .ee-tv__key--fx[aria-pressed="true"] i { color: #555; opacity: 1; }
+
+/* ─── ABOUT: perspective text crawl ─── */
+.crawl {
+  position: relative;
+  height: 26rem;
+  overflow: hidden;
+  perspective: 22rem;
+  perspective-origin: 50% 0%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 38%, #000 100%);
+          mask-image: linear-gradient(to bottom, transparent 0%, #000 38%, #000 100%);
+  outline: none;
+}
+.crawl__stage {
+  position: absolute;
+  inset: 0 6%;
+  transform-origin: 50% 100%;
+  transform: rotateX(24deg);
+}
+.crawl__text {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  letter-spacing: 0.04em;
+  text-align: justify;
+  color: #e8e8e8;
+  animation: crawl-up 70s linear infinite;
+}
+.crawl__text p + p { margin-top: 1.4em; }
+.crawl__kicker {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  letter-spacing: 0.18em;
+  text-align: center;
+  color: var(--fg);
+}
+.crawl__motto {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.82rem;
+  color: var(--dim);
+}
+.crawl:hover .crawl__text,
+.crawl:focus .crawl__text { animation-play-state: paused; }
+@keyframes crawl-up {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-100% - 30rem)); }
+}
+@media (max-width: 480px) {
+  .crawl { height: 22rem; perspective: 16rem; }
+  .crawl__stage { inset: 0 2%; }
+  .crawl__text { font-size: 0.92rem; animation-duration: 80s; }
+  .crawl__kicker { font-size: 1.5rem; }
+}
+/* No motion: show the bio flat and still */
+@media (prefers-reduced-motion: reduce) {
+  .crawl { height: auto; perspective: none; -webkit-mask-image: none; mask-image: none; }
+  .crawl__stage { position: static; transform: none; }
+  .crawl__text { position: static; animation: none; font-size: 0.8rem; font-weight: 400; line-height: 1.8; color: #bbb; }
+}
