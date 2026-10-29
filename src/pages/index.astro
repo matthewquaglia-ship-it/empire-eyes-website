@@ -99,7 +99,7 @@ const jsonLd = {
                   <div class="release-actions">
                     {"lore" in r && <label for={loreId} class="release-platforms-toggle">READ ↓</label>}
                     {"listenUrl" in r
-                      ? <a href={r.listenUrl as string} class="release-platforms-toggle" target="_blank" rel="noopener noreferrer">PRE RELEASE LISTEN →</a>
+                      ? <a href={r.listenUrl as string} class="release-platforms-toggle">PRE RELEASE LISTEN →</a>
                       : <label for={streamId} class="release-platforms-toggle">STREAM ↓</label>
                     }
                   </div>

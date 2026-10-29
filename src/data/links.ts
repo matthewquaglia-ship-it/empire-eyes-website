@@ -133,7 +133,7 @@ export const releases = [
     year: "Pre-Release",
     genre: "Alternative / Future Pop",
     artwork: "/images/disco-volante.jpg",
-    listenUrl: "https://soundcloud.com/empireeyes/sets/disco-volante-master-20/s-JKWDIo9q0Mq",
+    listenUrl: "/listening-room",
     // READ write-up (paragraphs split on a blank line)
     lore: `Disco Volante explores the journey of rediscovery after the fall. The world around us has shown its cards, and all that's left is to look up, in hope that there's something bigger to guide the way forward. The ultimate consolation is a connection that wants to be built on the rubble of what doesn't stand on its own.\n\nAnd as we walk this road, the floor feels thin. A new way to see it all arrives in puzzles and pieces, when we choose to listen into the silence instead of bowing to the loudest thing in the room. We become extraterrestrial to our own experience, until we let go of the idea of forever, learning instead that not knowing may take me there, beyond the smallness of space time.\n\nWhen I think it's me, I kiss myself, and something bigger rolls its eyes, because everything's divided by me.\n\nDisco Volante means flying saucer, and until we land again, I guess that's what we'll be.`,
     tracklist: ["This Road", "Kiss Yourself", "Forever", "See It All", "Divided by Me", "Space Time", "Take Me There", "Consolation"],
