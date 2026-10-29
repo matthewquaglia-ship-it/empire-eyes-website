@@ -53,7 +53,7 @@ const metaDesc = "lore" in r
     {"listenUrl" in r ? (
       <section class="rp-section">
         <h2 class="section-label">Listen</h2>
-        <a href={r.listenUrl as string} class="rp-listen-btn">PRE RELEASE LISTEN &rarr;</a>
+        <a href={r.listenUrl as string} class="rp-listen-btn" target="_blank" rel="noopener noreferrer">PRE RELEASE LISTEN &rarr;</a>
       </section>
     ) : (r.platforms as readonly { name: string; url: string }[]).length > 0 ? (
       <section class="rp-section">
