@@ -33,7 +33,7 @@ export const videos = [
   {
     // No YouTube id yet: the still opens the Forever viewer instead of linking out.
     // When the video is up, set id to its YouTube id (and drop thumb to use YouTube's).
-    id: "",
+    id: "YJ-j4XXeEMc",
     title: "Forever",
     label: "Music Video",
     year: "Coming soon",

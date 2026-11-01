@@ -160,9 +160,14 @@ const jsonLd = {
                 <span class="release-title">{video.title}</span>
                 <span class="release-meta">{video.label}</span>
                 <span class="release-meta">{video.year}</span>
-                {hasPanel && (
+                {(hasPanel || video.id) && (
                   <div class="release-actions">
-                    <label for={videoLoreId} class="release-platforms-toggle">{"lore" in video ? "READ ↓" : "WATCH ↓"}</label>
+                    {hasPanel && (
+                      <label for={videoLoreId} class="release-platforms-toggle">{"lore" in video ? "READ ↓" : "REEL ↓"}</label>
+                    )}
+                    {video.id && (
+                      <a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer" class="release-platforms-toggle">WATCH →</a>
+                    )}
                   </div>
                 )}
               </div>
