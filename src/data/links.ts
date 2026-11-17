@@ -134,8 +134,10 @@ export const releases = [
     datePublished: "2026-11-27",
     genre: "Alternative / Future Pop",
     artwork: "/images/forever-single.jpg",
-    lore: `Director's note — Michael Spagnoletti\n\nWhen I heard Forever, I fell in love with the pulsing drive of the synthesiser. It reminded me of the many times Matt and I drove around Adelaide, listening to music and talking about life. I was really interested in bringing this idea to the visuals of the song, however, I wanted the music clip to arise organically through creative play.\n\nSo one night, after setting up our friend's gigantic screen and playing around with its inputs, we somehow decided to live-cast our phone, which began capturing this warping imagery of whoever was in front of it. This movement, and in particular, the time dilation of the background caused by the lag in the live stream meshed with the song in such a unique way that we knew we were onto something special. It all fell into place.`,
-    platforms: [],
+    lore: `Forever is the first single from Disco Volante, the second album from Adelaide's Empire Eyes. Driven by a pulsing synthesiser, it's a song about letting go and becoming comfortable with things falling away. It came together in one night. "Away from the noise of the city, I found myself in one of those creative flows, where things went quiet around me and I felt like I was just riding the wave," says Matthew Quaglia.\n\n"Forever is about letting go, about becoming comfortable with things falling away. While we were filming, an accidental delay on the screen echoed my performance back behind me, and that was the song right there: the present slipping into the past while you're still in it."`,
+    platforms: [
+      { name: "Spotify", url: "https://open.spotify.com/album/42ZjLrzOzGqiv29jZeUmJd" },
+    ],
   },
   {
     title: "Disco Volante",
