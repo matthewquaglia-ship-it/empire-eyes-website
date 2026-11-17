@@ -128,6 +128,16 @@ export const releases = [
     ],
   },
   {
+    title: "Forever",
+    type: "Single",
+    year: 2026,
+    datePublished: "2026-11-27",
+    genre: "Alternative / Future Pop",
+    artwork: "/images/forever-single.jpg",
+    lore: `Director's note — Michael Spagnoletti\n\nWhen I heard Forever, I fell in love with the pulsing drive of the synthesiser. It reminded me of the many times Matt and I drove around Adelaide, listening to music and talking about life. I was really interested in bringing this idea to the visuals of the song, however, I wanted the music clip to arise organically through creative play.\n\nSo one night, after setting up our friend's gigantic screen and playing around with its inputs, we somehow decided to live-cast our phone, which began capturing this warping imagery of whoever was in front of it. This movement, and in particular, the time dilation of the background caused by the lag in the live stream meshed with the song in such a unique way that we knew we were onto something special. It all fell into place.`,
+    platforms: [],
+  },
+  {
     title: "Disco Volante",
     type: "Album",
     year: "Pre-Release",
