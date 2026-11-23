@@ -19,41 +19,47 @@ import "../styles/global.css";
   </div>
 </Layout>
 
-<script>
-  const VERSION = "4.4.168";
+<script is:inline>
+(async function () {
+  const CDN  = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js";
+  const WRKR = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js";
 
-  async function init() {
-    const { getDocument, GlobalWorkerOptions } = await import(
-      `https://cdn.jsdelivr.net/npm/pdfjs-dist@${VERSION}/build/pdf.min.mjs`
-    );
-    GlobalWorkerOptions.workerSrc =
-      `https://cdn.jsdelivr.net/npm/pdfjs-dist@${VERSION}/build/pdf.worker.min.mjs`;
+  await new Promise(function (resolve, reject) {
+    var s = document.createElement("script");
+    s.src = CDN;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
 
-    const pages   = document.getElementById("mag-pages") as HTMLElement;
-    const info    = document.getElementById("mag-info") as HTMLElement;
-    const loading = document.getElementById("mag-loading") as HTMLElement;
+  var lib     = window["pdfjsLib"];
+  lib.GlobalWorkerOptions.workerSrc = WRKR;
 
-    const pdf = await getDocument("/press/disco-volante-magazine.pdf").promise;
-    info.textContent = `${pdf.numPages} pages`;
+  var pages   = document.getElementById("mag-pages");
+  var info    = document.getElementById("mag-info");
+  var loading = document.getElementById("mag-loading");
+
+  try {
+    var pdf = await lib.getDocument("/press/disco-volante-magazine.pdf").promise;
+    info.textContent = pdf.numPages + " pages";
     loading.remove();
 
-    for (let n = 1; n <= pdf.numPages; n++) {
-      const page     = await pdf.getPage(n);
-      const baseVP   = page.getViewport({ scale: 1 });
-      const scale    = Math.min(2, (window.innerWidth - 32) / baseVP.width);
-      const viewport = page.getViewport({ scale });
-      const canvas   = document.createElement("canvas");
-      canvas.width   = viewport.width;
-      canvas.height  = viewport.height;
+    for (var n = 1; n <= pdf.numPages; n++) {
+      var page   = await pdf.getPage(n);
+      var baseVP = page.getViewport({ scale: 1 });
+      var scale  = Math.min(2, (window.innerWidth - 32) / baseVP.width);
+      var vp     = page.getViewport({ scale: scale });
+      var canvas = document.createElement("canvas");
+      canvas.width  = vp.width;
+      canvas.height = vp.height;
       pages.appendChild(canvas);
-      await page.render({ canvasContext: canvas.getContext("2d")!, viewport }).promise;
+      await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp }).promise;
     }
+  } catch (err) {
+    if (loading) loading.textContent = "Could not load PDF.";
+    console.error(err);
   }
-
-  init().catch(() => {
-    const el = document.getElementById("mag-loading");
-    if (el) el.textContent = "Could not load PDF.";
-  });
+})();
 </script>
 
 <style>
