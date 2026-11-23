@@ -57,8 +57,7 @@ body::before {
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 10vw, 4rem);
   letter-spacing: 0.15em;
-  padding: 2rem 0 1.5rem;
-  border-bottom: 1px solid var(--border);
+  padding: 2rem 0 0.75rem;
   position: relative;
 }
 
@@ -72,7 +71,7 @@ body::before {
   height: 100%;
   opacity: 0;
   pointer-events: none;
-  padding: 2rem 0 1.5rem;
+  padding: 2rem 0 0.75rem;
 }
 
 .site-title::before { color: #f0f; z-index: -1; }
