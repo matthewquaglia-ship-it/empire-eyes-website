@@ -52,6 +52,20 @@ body::before {
   background-size: 256px 256px;
 }
 
+/* ─── SITE HEADER ─── */
+.site-header {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 1.5rem;
+}
+
+.site-header-logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  letter-spacing: 0.15em;
+  color: var(--fg);
+}
+
 /* ─── HERO ─── */
 .hero {
   height: 100dvh;
