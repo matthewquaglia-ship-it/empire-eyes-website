@@ -44,14 +44,18 @@ import "../styles/global.css";
     info.textContent = pdf.numPages + " pages";
     loading.remove();
 
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
     for (var n = 1; n <= pdf.numPages; n++) {
       var page   = await pdf.getPage(n);
       var baseVP = page.getViewport({ scale: 1 });
       var scale  = Math.min(2, (window.innerWidth - 32) / baseVP.width);
-      var vp     = page.getViewport({ scale: scale });
+      var vp     = page.getViewport({ scale: scale * dpr });
       var canvas = document.createElement("canvas");
       canvas.width  = vp.width;
       canvas.height = vp.height;
+      canvas.style.width  = Math.round(vp.width  / dpr) + "px";
+      canvas.style.height = Math.round(vp.height / dpr) + "px";
       pages.appendChild(canvas);
       await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp }).promise;
     }
