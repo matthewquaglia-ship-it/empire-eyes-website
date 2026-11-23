@@ -50,10 +50,10 @@ const metaDesc = "lore" in r
     </section>
 
     <!-- Stream / Listen -->
-    {"listenUrl" in r ? (
+    {"magazineUrl" in r ? (
       <section class="rp-section">
-        <h2 class="section-label">Listen</h2>
-        <a href={r.listenUrl as string} class="rp-listen-btn">PRE RELEASE LISTEN &rarr;</a>
+        <h2 class="section-label">Magazine</h2>
+        <a href={r.magazineUrl as string} class="rp-listen-btn">READ MAGAZINE &rarr;</a>
       </section>
     ) : (r.platforms as readonly { name: string; url: string }[]).length > 0 ? (
       <section class="rp-section">
