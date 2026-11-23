@@ -4,30 +4,61 @@ import "../styles/global.css";
 ---
 
 <Layout
-  title="Disco Volante — Empire Eyes"
+  title="Disco Volante Magazine — Empire Eyes"
   description="Disco Volante release magazine by Empire Eyes."
 >
-  <main class="mag-main">
-    <div class="mag-nav">
+  <div class="mag-wrap">
+    <nav class="mag-nav">
       <a href="/#release">&larr; EMPIRE EYES</a>
-      <a href="/press/disco-volante-magazine.pdf" download class="mag-download">DOWNLOAD &darr;</a>
+      <span class="mag-info" id="mag-info"></span>
+      <a href="/press/disco-volante-magazine.pdf" download>DOWNLOAD &darr;</a>
+    </nav>
+    <div class="mag-pages" id="mag-pages">
+      <p class="mag-loading" id="mag-loading">Loading…</p>
     </div>
-    <div class="mag-viewer">
-      <iframe
-        src="/press/disco-volante-magazine.pdf#zoom=page-fit"
-        class="mag-frame"
-        title="Disco Volante — Release Magazine"
-      ></iframe>
-    </div>
-  </main>
+  </div>
 </Layout>
 
+<script>
+  const VERSION = "3.11.174";
+
+  async function init() {
+    const { getDocument, GlobalWorkerOptions } = await import(
+      `https://cdn.jsdelivr.net/npm/pdfjs-dist@${VERSION}/build/pdf.min.mjs`
+    );
+    GlobalWorkerOptions.workerSrc =
+      `https://cdn.jsdelivr.net/npm/pdfjs-dist@${VERSION}/build/pdf.worker.min.mjs`;
+
+    const pages   = document.getElementById("mag-pages") as HTMLElement;
+    const info    = document.getElementById("mag-info") as HTMLElement;
+    const loading = document.getElementById("mag-loading") as HTMLElement;
+
+    const pdf = await getDocument("/press/disco-volante-magazine.pdf").promise;
+    info.textContent = `${pdf.numPages} pages`;
+    loading.remove();
+
+    for (let n = 1; n <= pdf.numPages; n++) {
+      const page     = await pdf.getPage(n);
+      const baseVP   = page.getViewport({ scale: 1 });
+      const scale    = Math.min(2, (window.innerWidth - 32) / baseVP.width);
+      const viewport = page.getViewport({ scale });
+      const canvas   = document.createElement("canvas");
+      canvas.width   = viewport.width;
+      canvas.height  = viewport.height;
+      pages.appendChild(canvas);
+      await page.render({ canvasContext: canvas.getContext("2d")!, viewport }).promise;
+    }
+  }
+
+  init().catch(() => {
+    const el = document.getElementById("mag-loading");
+    if (el) el.textContent = "Could not load PDF.";
+  });
+</script>
+
 <style>
-  .mag-main {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
+  .mag-wrap {
+    min-height: 100vh;
   }
 
   .mag-nav {
@@ -36,10 +67,14 @@ import "../styles/global.css";
     justify-content: space-between;
     padding: 1rem var(--gutter, 1.25rem);
     border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
   }
 
-  .mag-nav a {
+  .mag-nav a,
+  .mag-info {
     font-size: 0.65rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -48,15 +83,26 @@ import "../styles/global.css";
   }
   .mag-nav a:hover { color: var(--fg); }
 
-  .mag-viewer {
-    flex: 1;
-    overflow: hidden;
+  .mag-pages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 2rem 0;
   }
 
-  .mag-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
+  .mag-pages canvas {
     display: block;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+  }
+
+  .mag-loading {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 4rem 0;
   }
 </style>
