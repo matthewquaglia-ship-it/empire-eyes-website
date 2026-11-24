@@ -1,0 +1,130 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+---
+
+<Layout
+  title="Privacy — Empire Eyes"
+  description="How Empire Eyes handles data on this website, its link pages, its mailing list and its ads."
+>
+  <main class="privacy">
+    <nav class="privacy-nav">
+      <a href="/">&larr; EMPIRE EYES</a>
+    </nav>
+
+    <h1 class="privacy-title">Privacy</h1>
+    <p class="privacy-label">Last updated 24 November 2026</p>
+
+    <section>
+      <h2>Who we are</h2>
+      <p>
+        Empire Eyes is the music project of Matthew Quaglia, based in Adelaide, South Australia.
+        For anything about this policy or your data, email
+        <a href="mailto:mgmt@empire-eyes.com">mgmt@empire-eyes.com</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2>This website</h2>
+      <p>
+        empire-eyes.com doesn't use analytics, advertising cookies or tracking scripts. Fonts are
+        loaded from Google Fonts, which receives your IP address and browser details to deliver them.
+        The website itself doesn't collect or store any personal information.
+      </p>
+    </section>
+
+    <section>
+      <h2>Listening links and ads</h2>
+      <p>
+        We advertise our music on Facebook, Instagram and Threads. The ads link to landing pages
+        hosted by SubmitHub Links, which list where to listen. Those pages use the Meta pixel and
+        Meta's Conversions API to tell Meta when someone visits, taps a listening button or opens
+        a streaming app. This can include your IP address, browser and device details, and Meta's
+        own cookie identifiers.
+      </p>
+      <p>
+        We use this only to measure how our ads perform and to show our music to people likely to
+        enjoy it, including people who have already engaged with Empire Eyes. Meta handles this
+        information under its own
+        <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">privacy policy</a>.
+        You can control the ads you see in your Facebook or Instagram ad preferences.
+      </p>
+    </section>
+
+    <section>
+      <h2>Mailing list</h2>
+      <p>
+        Our mailing list runs on Substack, which stores your email address under its own
+        <a href="https://substack.com/privacy" target="_blank" rel="noopener">privacy policy</a>.
+        We may upload subscribers' email addresses to Meta to show our music to subscribers on
+        Facebook and Instagram. Meta encrypts (hashes) the addresses before matching them and
+        deletes them after matching. You can unsubscribe at any time from any email.
+      </p>
+    </section>
+
+    <section>
+      <h2>What we don't do</h2>
+      <p>
+        We don't sell or rent personal information, and we don't share it with anyone other than
+        the services named above.
+      </p>
+    </section>
+
+    <section id="data-deletion">
+      <h2>Your data and deletion requests</h2>
+      <p>
+        You can ask what information we hold about you, ask us to correct it, or ask us to delete
+        it, by emailing <a href="mailto:mgmt@empire-eyes.com">mgmt@empire-eyes.com</a>. We'll reply
+        within 30 days. Our Meta business app doesn't store personal data of its own; any
+        information Meta holds about you can also be managed or deleted in your Facebook or
+        Instagram settings.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .privacy {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 2rem var(--gutter) 4rem;
+    line-height: 1.6;
+  }
+  .privacy-nav a,
+  .privacy-label,
+  .privacy h2 {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .privacy-nav a {
+    text-decoration: none;
+  }
+  .privacy-title {
+    font-family: var(--font-display);
+    font-weight: normal;
+    font-size: 2.5rem;
+    margin: 2.5rem 0 0.5rem;
+  }
+  .privacy-label {
+    margin: 0 0 2.5rem;
+  }
+  .privacy section {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 0 0.5rem;
+  }
+  .privacy h2 {
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+  }
+  .privacy p {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+  }
+  .privacy p a {
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
