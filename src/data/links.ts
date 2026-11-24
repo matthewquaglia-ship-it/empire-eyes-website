@@ -136,7 +136,13 @@ export const releases = [
     artwork: "/images/forever-single.jpg",
     lore: `Forever is the first single from Disco Volante, the second album from Adelaide's Empire Eyes. Driven by a pulsing synthesiser, it's a song about letting go and becoming comfortable with things falling away. It came together in one night. "Away from the noise of the city, I found myself in one of those creative flows, where things went quiet around me and I felt like I was just riding the wave," says Matthew Quaglia.\n\n"Forever is about letting go, about becoming comfortable with things falling away. While we were filming, an accidental delay on the screen echoed my performance back behind me, and that was the song right there: the present slipping into the past while you're still in it."`,
     platforms: [
-      { name: "Spotify", url: "https://open.spotify.com/album/42ZjLrzOzGqiv29jZeUmJd" },
+      { name: "Spotify",       url: "https://open.spotify.com/album/42ZjLrzOzGqiv29jZeUmJd" },
+      // { name: "Apple Music",   url: "" },
+      // { name: "YouTube Music", url: "" },
+      // { name: "TIDAL",         url: "" },
+      // { name: "Bandcamp",      url: "" },
+      // { name: "SoundCloud",    url: "" },
+      // { name: "Deezer",        url: "" },
     ],
   },
   {
@@ -149,7 +155,15 @@ export const releases = [
     // READ write-up (paragraphs split on a blank line)
     lore: `Disco Volante explores the journey of rediscovery after the fall. The world around us has shown its cards, and all that's left is to look up, in hope that there's something bigger to guide the way forward. The ultimate consolation is a connection that wants to be built on the rubble of what doesn't stand on its own.\n\nAnd as we walk this road, the floor feels thin. A new way to see it all arrives in puzzles and pieces, when we choose to listen into the silence instead of bowing to the loudest thing in the room. We become extraterrestrial to our own experience, until we let go of the idea of forever, learning instead that not knowing may take me there, beyond the smallness of space time.\n\nSomething moves at the threshold between what we know and what we can't yet hold. Not inside the walls and not beyond them — it appears at the membrane and then is gone. It isn't trying to land or be classified. Strange to those who live entirely inside the walls, but not threatening. Just genuinely unclassifiable.\n\nWhen I think it's me, I kiss myself, and something bigger rolls its eyes, because everything's divided by me.\n\nThe saucer doesn't explain itself. Disco Volante means flying saucer — a disc that skims surfaces rather than being rooted in them. Not a creature of depth or of height, but of the between. The horizontal threshold. The membrane itself, given form and motion. Until we land again, I guess that's what we'll be.`,
     tracklist: ["This Road", "Kiss Yourself", "Forever", "See It All", "Divided by Me", "Space Time", "Take Me There", "Consolation"],
-    platforms: [],
+    platforms: [
+      // { name: "Spotify",       url: "" },
+      // { name: "Apple Music",   url: "" },
+      // { name: "YouTube Music", url: "" },
+      // { name: "TIDAL",         url: "" },
+      // { name: "Bandcamp",      url: "" },
+      // { name: "SoundCloud",    url: "" },
+      // { name: "Deezer",        url: "" },
+    ],
   },
 ] as const;
 
